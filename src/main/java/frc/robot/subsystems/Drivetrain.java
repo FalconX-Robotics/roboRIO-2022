@@ -4,12 +4,38 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 
 public class Drivetrain extends SubsystemBase {
+// Define motor
+	// left MotorControl group
+	CANSparkMax leftFrontMotor = new CANSparkMax(Constants.leftFrontMotorPort, MotorType.kBrushless);
+	CANSparkMax leftBackMotor = new CANSparkMax(Constants.leftBackMotorPort, MotorType.kBrushless);
+	private MotorControllerGroup leftSide = new MotorControllerGroup(leftFrontMotor, leftBackMotor);
+	// right MotorControl group
+	CANSparkMax rightFrontMotor = new CANSparkMax(Constants.rightFrontMotorPort, MotorType.kBrushless);
+	CANSparkMax rightBackMotor = new CANSparkMax(Constants.rightBackMotorPort, MotorType.kBrushless);
+	private MotorControllerGroup rightSide = new MotorControllerGroup(rightFrontMotor, rightBackMotor);
+
+	private DifferentialDrive drivetrain = new DifferentialDrive(leftSide, rightSide);
+	
 	/** Creates a new ExampleSubsystem. */
 	public Drivetrain() {
 		
+	}
+
+	public void tankDrive(double leftSpeed, double rightSpeed) {
+		drivetrain.tankDrive(leftSpeed, rightSpeed);
+	}
+
+	public void arcadeDrive(double xSpeed, double zRotation) {
+		drivetrain.arcadeDrive(xSpeed, zRotation);
 	}
 	
 	@Override
