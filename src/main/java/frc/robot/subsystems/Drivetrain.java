@@ -11,6 +11,18 @@ public class Drivetrain extends SubsystemBase {
 	public Drivetrain() {
 		
 	}
+
+	public void arcadeDrive(double xSpeed, double zRotation) {
+		// to be implemented
+	}
+
+	public void resetGyro() {
+
+	}
+
+	public double gyroYaw() {
+		return 0; // to be implemented
+	}
 	
 	@Override
 	public void periodic() {
