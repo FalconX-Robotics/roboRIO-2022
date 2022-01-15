@@ -10,6 +10,7 @@ import frc.robot.subsystems.Drivetrain;
 public class TurnAngle extends PIDCommand {
     protected double kP = 0, kI = 0, kD = 0;
     protected double kTolerance = 2;
+    protected double maxSpeed;
     
     public TurnAngle(DoubleSupplier setpointSource, Drivetrain drivetrain, double maxSpeed) {
         super(new PIDController(0, 0, 0),
@@ -17,6 +18,7 @@ public class TurnAngle extends PIDCommand {
             setpointSource,
             output -> drivetrain.arcadeDrive(0, MathUtil.clamp(output, -maxSpeed, maxSpeed)),
             drivetrain);
+        this.maxSpeed = maxSpeed;
 
         drivetrain.resetGyro();
         m_controller.setPID(kP, kI, kD);
