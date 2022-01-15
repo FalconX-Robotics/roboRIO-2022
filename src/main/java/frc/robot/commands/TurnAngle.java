@@ -18,8 +18,8 @@ public class TurnAngle extends PIDCommand {
             drivetrain);
 
         drivetrain.resetGyro();
-        getController().enableContinuousInput(-180, 180);
-        getController().setTolerance(kTolerance);
+        m_controller.enableContinuousInput(-180, 180);
+        m_controller.setTolerance(kTolerance);
     }
 
     public TurnAngle(double setpointSource, Drivetrain drivetrain) {
