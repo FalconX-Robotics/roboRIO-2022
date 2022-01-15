@@ -32,5 +32,12 @@ public class TurnToTarget extends TurnAngle {
     public void initialize() {
         super.initialize();
         m_setpoint = this::setpointSource;
+        camera.capture(true);
+    }
+
+    @Override 
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        camera.capture(false);
     }
 }
