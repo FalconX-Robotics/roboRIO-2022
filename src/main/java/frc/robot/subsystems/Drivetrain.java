@@ -15,7 +15,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 public class Drivetrain extends SubsystemBase {
-	PigeonIMU pigeon = new PigeonIMU(Constants.pigeonPort);
+	private PigeonIMU pigeon = new PigeonIMU(Constants.pigeonPort);
 
 // Define motor
 	// left MotorControl group
