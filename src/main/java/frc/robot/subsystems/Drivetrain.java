@@ -8,11 +8,15 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 public class Drivetrain extends SubsystemBase {
+	PigeonIMU pigeon = new PigeonIMU(Constants.pigeonPort);
+
 // Define motor
 	// left MotorControl group
 	CANSparkMax leftFrontMotor = new CANSparkMax(Constants.leftFrontMotorPort, MotorType.kBrushless);
@@ -28,6 +32,23 @@ public class Drivetrain extends SubsystemBase {
 	/** Creates a new ExampleSubsystem. */
 	public Drivetrain() {
 		
+	}
+
+	public double gyroYawRaw() {
+		double[] ypr_deg = new double[3];
+		pigeon.getYawPitchRoll(ypr_deg);
+		return ypr_deg[0];
+	}
+
+	/**
+	 * @return gyro yaw between [-180, 180]
+	 */
+	public double gyroYaw() {
+		double yaw = gyroYawRaw();
+		yaw %= 360;
+		if (yaw < 0)
+			yaw = (yaw + 360) % 360;
+		return yaw <= 180 ? yaw : -360 + yaw;
 	}
 
 	public void tankDrive(double leftSpeed, double rightSpeed) {
