@@ -46,8 +46,7 @@ public class Drivetrain extends SubsystemBase {
 	public double gyroYaw() {
 		double yaw = gyroYawRaw();
 		yaw %= 360;
-		if (yaw < 0)
-			yaw = (yaw + 360) % 360;
+		if (yaw < 0) yaw += 360;
 		return yaw <= 180 ? yaw : -360 + yaw;
 	}
 
