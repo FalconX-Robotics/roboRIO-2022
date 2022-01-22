@@ -26,11 +26,17 @@ public class Drivetrain extends SubsystemBase {
 
 	private DifferentialDrive drivetrain = new DifferentialDrive(leftSide, rightSide);
 
-	private double maxSpeed = 0.3;
+	private double maxSpeed = 1.0;
 	
 	/** Creates a new ExampleSubsystem. */
 	public Drivetrain() {
-		
+		drivetrain.setDeadband(0.05);
+		drivetrain.setSafetyEnabled(true);
+
+		leftBackMotor.restoreFactoryDefaults();
+		leftFrontMotor.restoreFactoryDefaults();
+		rightBackMotor.restoreFactoryDefaults();
+		rightFrontMotor.restoreFactoryDefaults();
 	}
 
 	public void tankDrive(double leftSpeed, double rightSpeed) {
