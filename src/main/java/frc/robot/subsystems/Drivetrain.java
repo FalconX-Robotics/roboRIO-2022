@@ -26,29 +26,36 @@ public class Drivetrain extends SubsystemBase {
 
 	private DifferentialDrive drivetrain = new DifferentialDrive(leftSide, rightSide);
 
-	private double maxSpeed = 1.0;
+	private double maxSpeed = 1;
 	
 	/** Creates a new ExampleSubsystem. */
 	public Drivetrain() {
 		drivetrain.setDeadband(0.05);
 		drivetrain.setSafetyEnabled(true);
 
-		leftBackMotor.restoreFactoryDefaults();
-		leftFrontMotor.restoreFactoryDefaults();
-		rightBackMotor.restoreFactoryDefaults();
-		rightFrontMotor.restoreFactoryDefaults();
+		// leftBackMotor.restoreFactoryDefaults();
+		// leftFrontMotor.restoreFactoryDefaults();
+		// rightBackMotor.restoreFactoryDefaults();
+		// rightFrontMotor.restoreFactoryDefaults();
+
+		rightSide.setInverted(true);
 	}
 
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-		leftSpeed = MathUtil.clamp(leftSpeed, -maxSpeed, maxSpeed);
-		rightSpeed = MathUtil.clamp(rightSpeed, -maxSpeed, maxSpeed);
+		leftSpeed = inputToSpeed(leftSpeed);
+		rightSpeed = inputToSpeed(rightSpeed);
 		drivetrain.tankDrive(leftSpeed, rightSpeed);
 	}
 
 	public void arcadeDrive(double xSpeed, double zRotation) {
-		xSpeed = MathUtil.clamp(xSpeed, -maxSpeed, maxSpeed);
-		zRotation = MathUtil.clamp(zRotation, -maxSpeed, maxSpeed);
+		xSpeed = inputToSpeed(xSpeed);
+		zRotation = inputToSpeed(-zRotation);
 		drivetrain.arcadeDrive(xSpeed, zRotation);
+	}
+
+	public double inputToSpeed(double input) {
+		input *= -1;
+		return MathUtil.clamp(input, -maxSpeed, maxSpeed);
 	}
 	
 	@Override
