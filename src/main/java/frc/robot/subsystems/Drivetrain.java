@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,6 +29,8 @@ public class Drivetrain extends SubsystemBase {
 	private MotorControllerGroup rightSide = new MotorControllerGroup(rightFrontMotor, rightBackMotor);
 
 	private DifferentialDrive drivetrain = new DifferentialDrive(leftSide, rightSide);
+
+	private double maxSpeed = 0.3;
 	
 	/** Creates a new ExampleSubsystem. */
 	public Drivetrain() {
@@ -35,10 +38,14 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void tankDrive(double leftSpeed, double rightSpeed) {
+		leftSpeed = MathUtil.clamp(leftSpeed, -maxSpeed, maxSpeed);
+		rightSpeed = MathUtil.clamp(rightSpeed, -maxSpeed, maxSpeed);
 		drivetrain.tankDrive(leftSpeed, rightSpeed);
 	}
 
 	public void arcadeDrive(double xSpeed, double zRotation) {
+		xSpeed = MathUtil.clamp(xSpeed, -maxSpeed, maxSpeed);
+		zRotation = MathUtil.clamp(zRotation, -maxSpeed, maxSpeed);
 		drivetrain.arcadeDrive(xSpeed, zRotation);
 	}
 

@@ -22,6 +22,8 @@ public final class Constants {
         // right ports
     public final static int rightFrontMotorPort = 3;
     public final static int rightBackMotorPort = 4;
+        // controller port
+    public final static int CONTROLLER_PORT = 0;
 
 
     
