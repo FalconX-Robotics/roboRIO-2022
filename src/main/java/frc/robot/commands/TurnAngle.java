@@ -20,7 +20,7 @@ public class TurnAngle extends PIDCommand {
             drivetrain);
         this.maxSpeed = maxSpeed;
 
-        drivetrain.resetGyro();
+        drivetrain.resetGyroYaw();
         m_controller.setPID(kP, kI, kD);
         m_controller.enableContinuousInput(-180, 180);
         m_controller.setTolerance(kTolerance);
