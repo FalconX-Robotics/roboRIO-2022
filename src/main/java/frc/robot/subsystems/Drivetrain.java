@@ -58,8 +58,7 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public double inputToSpeed(double input) {
-		input *= -1;
-		return MathUtil.clamp(input, -maxSpeed, maxSpeed);
+		return MathUtil.clamp(-input, -maxSpeed, maxSpeed);
 	}
 
 	public double gyroYawRaw() {

@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.subsystems.Drivetrain;
 
 public class TurnAngle extends PIDCommand {
-    protected double kP = 0, kI = 0, kD = 0;
-    protected double kTolerance = 2;
-    protected double maxSpeed;
+    protected double m_P = 0, m_I = 0, m_D = 0;
+    protected double m_tolerance = 2;
+    protected double m_maxSpeed;
     
     public TurnAngle(DoubleSupplier setpointSource, Drivetrain drivetrain, double maxSpeed) {
         super(new PIDController(0, 0, 0),
@@ -18,11 +18,11 @@ public class TurnAngle extends PIDCommand {
             setpointSource,
             output -> drivetrain.arcadeDrive(0, MathUtil.clamp(output, -maxSpeed, maxSpeed)),
             drivetrain);
-        this.maxSpeed = maxSpeed;
+        m_maxSpeed = maxSpeed;
         drivetrain.resetGyroYaw();
-        m_controller.setPID(kP, kI, kD);
+        m_controller.setPID(m_P, m_I, m_D);
         m_controller.enableContinuousInput(-180, 180);
-        m_controller.setTolerance(kTolerance);
+        m_controller.setTolerance(m_tolerance);
         m_controller.setIntegratorRange(-0.3, 0.3);
     }
 
@@ -31,7 +31,7 @@ public class TurnAngle extends PIDCommand {
     }
 
     public void setPID(double P, double I, double D) {
-        this.m_controller.setPID(P, I, D);
+        m_controller.setPID(P, I, D);
     }
 
     @Override
