@@ -19,7 +19,6 @@ public class TurnAngle extends PIDCommand {
             output -> drivetrain.arcadeDrive(0, MathUtil.clamp(output, -maxSpeed, maxSpeed)),
             drivetrain);
         this.maxSpeed = maxSpeed;
-
         drivetrain.resetGyroYaw();
         m_controller.setPID(kP, kI, kD);
         m_controller.enableContinuousInput(-180, 180);
@@ -29,6 +28,10 @@ public class TurnAngle extends PIDCommand {
 
     public TurnAngle(double setpointSource, Drivetrain drivetrain, double maxSpeed) {
         this(() -> setpointSource, drivetrain, maxSpeed);
+    }
+
+    public void setPID(double P, double I, double D) {
+        this.m_controller.setPID(P, I, D);
     }
 
     @Override
