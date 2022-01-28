@@ -28,6 +28,10 @@ public final class Constants {
         //INPUT_PORT
     public final static int INPUT_PORT = 0;
 
+        // top and bottom ports
+    public final static int TOP_PORT = 0;
+    public final static int BOTTOM_PORT = 0;
+
 
 
     
