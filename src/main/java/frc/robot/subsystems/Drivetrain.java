@@ -5,8 +5,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -31,6 +34,9 @@ public class Drivetrain extends SubsystemBase {
 	private DifferentialDrive drivetrain = new DifferentialDrive(leftSide, rightSide);
 
 	private double maxSpeed = 1;
+
+	private final ShuffleboardTab m_visionTab = Shuffleboard.getTab("vision");
+	private final NetworkTableEntry m_visionGyroEntry = m_visionTab.add("Gyro", 0.).getEntry();
 	
 	/** Creates a new ExampleSubsystem. */
 	public Drivetrain() {
@@ -84,6 +90,7 @@ public class Drivetrain extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		m_visionGyroEntry.setDouble(gyroYaw());
 	}
 	
 	@Override
