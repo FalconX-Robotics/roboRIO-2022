@@ -23,14 +23,14 @@ public class TurnAngle extends PIDCommand {
         super(new PIDController(0, 0, 0),
             drivetrain::gyroYaw,
             setpointSource,
-            output -> drivetrain.arcadeDrive(0, MathUtil.clamp(output, -maxSpeed, maxSpeed)),
+            output -> {},
             drivetrain);
         m_maxSpeed = maxSpeed;
         m_drivetrain = drivetrain;
         m_controller.setPID(m_P, m_I, m_D);
         m_controller.enableContinuousInput(-180, 180);
         m_controller.setTolerance(m_tolerance);
-        m_controller.setIntegratorRange(-0.3, 0.3);
+        m_controller.setIntegratorRange(-0.1, 0.1);
     }
 
     public TurnAngle(double setpointSource, Drivetrain drivetrain, double maxSpeed) {
@@ -39,7 +39,6 @@ public class TurnAngle extends PIDCommand {
 
     public void setPID(double P, double I, double D) {
         m_controller.setPID(P, I, D);
-        System.out.println("P: " + P);
     }
 
     @Override
@@ -63,7 +62,7 @@ public class TurnAngle extends PIDCommand {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("TurnAngle ended (interrupted)" + interrupted);
+        System.out.println("TurnAngle ended (interrupted) " + interrupted);
         m_errorField.setDouble(360);
     }
 }

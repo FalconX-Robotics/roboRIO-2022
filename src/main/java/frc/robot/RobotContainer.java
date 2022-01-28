@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -43,14 +42,13 @@ public class RobotContainer {
 	public RobotContainer() {
 		m_drivetrain.setDefaultCommand(m_arcadeDrive);
 
-		m_turnAngle.setPID(m_visionPField.getDouble(0), m_visionIField.getDouble(0), m_visionDField.getDouble(0));
 		m_visionTab.add("TurnAngle", new InstantCommand(() -> {
 			m_turnAngle.setPID(m_visionPField.getDouble(0), m_visionIField.getDouble(0), m_visionDField.getDouble(0));
 			m_turnAngle.schedule();
-		}));
+		}).withName("TurnAngle"));
 		m_visionTab.add("End", new InstantCommand(() -> {
 			m_turnAngle.cancel();
-		}));
+		}).withName("End TurnAngle"));
 
 		// Configure the button bindings
 		configureButtonBindings();
