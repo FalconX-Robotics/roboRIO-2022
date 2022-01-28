@@ -18,10 +18,10 @@ import frc.robot.subsystems.Drivetrain;
 * subsystems, commands, and button mappings) should be declared here.
 */
 public class RobotContainer {
-	// The robot's subsystems and commands are defined here...
+	//Defines drivetrain and the xbox controller
 	private final XboxController m_driver = new XboxController(Constants.CONTROLLER_PORT);
 	private final Drivetrain m_drivetrain = new Drivetrain();
-	//
+	//defines arcade drive and tank drive 
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
 	private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, m_driver);
 
