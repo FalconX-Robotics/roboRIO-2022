@@ -12,28 +12,31 @@ public class ArcadeDrive extends CommandBase {
 
   private final Drivetrain m_drivetrain;
   private final XboxController m_driver;
+
   /** Creates a new ArcadeDrive. */
 
   public ArcadeDrive(Drivetrain drivetrain, XboxController driver) {
-      m_drivetrain = drivetrain;
-      m_driver = driver;
-      addRequirements(m_drivetrain);
+    m_drivetrain = drivetrain;
+    m_driver = driver;
+    addRequirements(m_drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_drivetrain.arcadeDrive(m_driver.getLeftY(), m_driver.getRightX());
   }
-    
+
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
