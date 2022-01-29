@@ -8,7 +8,7 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase{
     CANSparkMax m_intake = new CANSparkMax(Constants.INPUT_PORT, MotorType.kBrushless);//Hey look it works now
-    double m_motorSpeed = Math.PI; //Hey this is important.
+    double m_motorSpeed = Math.PI; // random value; change later
     public Intake() {
         //something may go in here later (if you want)
         //I beleive this will run stuff while intake is running. chage this if im wrong
