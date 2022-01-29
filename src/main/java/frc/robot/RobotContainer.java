@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Outtake;
 
 /**
@@ -26,7 +28,7 @@ public class RobotContainer {
 	private final Drivetrain m_drivetrain = new Drivetrain();
 	//defines arcade drive and tank drive 
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
-	@SuppressWarnings("unused")
+	// @SuppressWarnings("unused") // I don't know what this does so let's just comment it out.
 	private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, m_driver);
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -38,7 +40,7 @@ public class RobotContainer {
 	
 	// Defines outtake subsystem
 	private final Outtake m_outtake = new Outtake();
-
+	private final Intake m_intake = new Intake();
 	/**
 	* Use this method to define your button->command mappings. Buttons can be created by
 	* instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -49,6 +51,8 @@ public class RobotContainer {
 	private void configureButtonBindings() {
 		new JoystickButton(m_driver, XboxController.Button.kA.value)
 		.toggleWhenPressed(new OuttakeCommand(m_outtake));
+		new JoystickButton(m_driver, XboxController.Button.kB.value)
+		.toggleWhenPressed(new IntakeCommand(m_intake));
 	}
 	
 	/**
