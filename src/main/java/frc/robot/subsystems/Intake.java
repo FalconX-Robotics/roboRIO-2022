@@ -7,8 +7,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase{
-    CANSparkMax m_intake = new CANSparkMax(Constants.INPUT_PORT, MotorType.kBrushless);//Hey look it works now
-    double m_motorSpeed = Math.PI; // random value; change later
+    private final CANSparkMax m_intake = new CANSparkMax(Constants.INPUT_PORT, MotorType.kBrushless);//Hey look it works now
+    private final double m_motorSpeed = Math.PI; // random value; change later
+    
     public Intake() {
         //something may go in here later (if you want)
         //I beleive this will run stuff while intake is running. chage this if im wrong

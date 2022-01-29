@@ -14,23 +14,23 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 public class Drivetrain extends SubsystemBase {
-// Define motor
+	// Define motor
 
 	//define left MotorControl group
-	CANSparkMax m_leftFrontMotor = new CANSparkMax(Constants.leftFrontMotorPort, MotorType.kBrushless);
-	CANSparkMax m_leftBackMotor = new CANSparkMax(Constants.leftBackMotorPort, MotorType.kBrushless);
-	private MotorControllerGroup m_leftSide = new MotorControllerGroup(m_leftFrontMotor, m_leftBackMotor);
+	private final CANSparkMax m_leftFrontMotor = new CANSparkMax(Constants.leftFrontMotorPort, MotorType.kBrushless);
+	private final CANSparkMax m_leftBackMotor = new CANSparkMax(Constants.leftBackMotorPort, MotorType.kBrushless);
+	private final MotorControllerGroup m_leftSide = new MotorControllerGroup(m_leftFrontMotor, m_leftBackMotor);
 
 	//defines right MotorControl group
-	CANSparkMax m_rightFrontMotor = new CANSparkMax(Constants.rightFrontMotorPort, MotorType.kBrushless);
-	CANSparkMax m_rightBackMotor = new CANSparkMax(Constants.rightBackMotorPort, MotorType.kBrushless);
-	private MotorControllerGroup m_rightSide = new MotorControllerGroup(m_rightFrontMotor, m_rightBackMotor);
+	private final CANSparkMax m_rightFrontMotor = new CANSparkMax(Constants.rightFrontMotorPort, MotorType.kBrushless);
+	private final CANSparkMax m_rightBackMotor = new CANSparkMax(Constants.rightBackMotorPort, MotorType.kBrushless);
+	private final MotorControllerGroup m_rightSide = new MotorControllerGroup(m_rightFrontMotor, m_rightBackMotor);
 
 	//defines m_drivetrain
-	private DifferentialDrive m_drivetrain = new DifferentialDrive(m_leftSide, m_rightSide);
+	private final DifferentialDrive m_drivetrain = new DifferentialDrive(m_leftSide, m_rightSide);
 
 	//defines m_maxWheelSpeed self explanatory
-	private double m_maxWheelSpeed = 1;
+	private final double m_maxWheelSpeed = 1;
 	
 	/** Creates a new Drivetrain*/
 	public Drivetrain() {

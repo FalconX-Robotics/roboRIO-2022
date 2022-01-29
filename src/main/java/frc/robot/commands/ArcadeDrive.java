@@ -11,7 +11,7 @@ import frc.robot.subsystems.Drivetrain;
 public class ArcadeDrive extends CommandBase {
 
   private final Drivetrain m_drivetrain;
-    private final XboxController m_driver;
+  private final XboxController m_driver;
   /** Creates a new ArcadeDrive. */
 
   public ArcadeDrive(Drivetrain drivetrain, XboxController driver) {
