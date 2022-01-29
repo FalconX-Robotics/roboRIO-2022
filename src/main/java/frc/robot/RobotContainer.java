@@ -31,8 +31,7 @@ public class RobotContainer {
 	private final Drivetrain m_drivetrain = new Drivetrain();
 	// defines arcade drive and tank drive
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
-	// @SuppressWarnings("unused") // I don't know what this does so let's just
-	// comment it out.
+	@SuppressWarnings("unused")
 	private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, m_driver);
 
 	/**
