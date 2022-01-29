@@ -5,34 +5,35 @@
 package frc.robot;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    //defines ports
-        //left ports
-	public final static int LEFT_FRONT_MOTOR_PORT = 1;
+    // defines ports
+    // left ports
+    public final static int LEFT_FRONT_MOTOR_PORT = 1;
     public final static int LEFT_BACK_MOTOR_PORT = 2;
 
-        // right ports
+    // right ports
     public final static int RIGHT_FRONT_MOTOR_PORT = 3;
     public final static int RIGHT_BACK_MOTOR_PORT = 4;
 
-        // controller port
+    // controller port
     public final static int CONTROLLER_PORT = 0;
-        
-        //INPUT_PORT
+
+    // INPUT_PORT
     public final static int INPUT_PORT = 0; // random value; change later
 
-        // top and bottom ports
+    // top and bottom ports
     public final static int TOP_PORT = 0; // random value; change later
     public final static int BOTTOM_PORT = 0; // random value; change later
 
-
-
-    
 }
