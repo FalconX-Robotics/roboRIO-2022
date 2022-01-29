@@ -23,6 +23,7 @@ public class RobotContainer {
 	private final Drivetrain m_drivetrain = new Drivetrain();
 	//defines arcade drive and tank drive 
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
+	@SuppressWarnings("unused")
 	private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, m_driver);
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
