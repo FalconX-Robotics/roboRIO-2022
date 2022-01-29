@@ -8,16 +8,18 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase{
     CANSparkMax m_intake = new CANSparkMax(Constants.INPUT_PORT, MotorType.kBrushless);//Hey look it works now
-
-    double motorSpeed = 0.314159265358979;//Hey this is important
-
+    double m_motorSpeed = Math.PI; //Hey this is important.
     public Intake() {
-    }//something may go in here later (if you want)
-    
-    //self-explanitory
-    public void runIntake() {
-        m_intake.set(motorSpeed);
+        //something may go in here later (if you want)
+        //I beleive this will run stuff while intake is running. chage this if im wrong
     }
+    
+    //self-explanitory, starts the intake motor
+    public void runIntake() {
+        m_intake.set(m_motorSpeed);
+    }
+    
+    //turns off intake motor I think
     public void disableIntake() {
         m_intake.set(0);
     }

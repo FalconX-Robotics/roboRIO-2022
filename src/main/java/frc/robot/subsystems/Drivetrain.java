@@ -15,47 +15,55 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drivetrain extends SubsystemBase {
 // Define motor
-	// left MotorControl group
-	CANSparkMax leftFrontMotor = new CANSparkMax(Constants.leftFrontMotorPort, MotorType.kBrushless);
-	CANSparkMax leftBackMotor = new CANSparkMax(Constants.leftBackMotorPort, MotorType.kBrushless);
-	private MotorControllerGroup leftSide = new MotorControllerGroup(leftFrontMotor, leftBackMotor);
-	// right MotorControl group
-	CANSparkMax rightFrontMotor = new CANSparkMax(Constants.rightFrontMotorPort, MotorType.kBrushless);
-	CANSparkMax rightBackMotor = new CANSparkMax(Constants.rightBackMotorPort, MotorType.kBrushless);
-	private MotorControllerGroup rightSide = new MotorControllerGroup(rightFrontMotor, rightBackMotor);
 
-	private DifferentialDrive drivetrain = new DifferentialDrive(leftSide, rightSide);
+	//define left MotorControl group
+	CANSparkMax m_leftFrontMotor = new CANSparkMax(Constants.leftFrontMotorPort, MotorType.kBrushless);
+	CANSparkMax m_leftBackMotor = new CANSparkMax(Constants.leftBackMotorPort, MotorType.kBrushless);
+	private MotorControllerGroup m_leftSide = new MotorControllerGroup(m_leftFrontMotor, m_leftBackMotor);
 
-	private double maxSpeed = 1;
+	//defines right MotorControl group
+	CANSparkMax m_rightFrontMotor = new CANSparkMax(Constants.rightFrontMotorPort, MotorType.kBrushless);
+	CANSparkMax m_rightBackMotor = new CANSparkMax(Constants.rightBackMotorPort, MotorType.kBrushless);
+	private MotorControllerGroup m_rightSide = new MotorControllerGroup(m_rightFrontMotor, m_rightBackMotor);
+
+	//defines m_drivetrain
+	private DifferentialDrive m_drivetrain = new DifferentialDrive(m_leftSide, m_rightSide);
+
+	//defines m_maxWheelSpeed self explanatory
+	private double m_maxWheelSpeed = 1;
 	
-	/** Creates a new ExampleSubsystem. */
+	/** Creates a new Drivetrain*/
 	public Drivetrain() {
-		drivetrain.setDeadband(0.05);
-		drivetrain.setSafetyEnabled(true);
+		m_drivetrain.setDeadband(0.05);
+		m_drivetrain.setSafetyEnabled(true);
 
+		m_rightSide.setInverted(true);
 		// leftBackMotor.restoreFactoryDefaults();
 		// leftFrontMotor.restoreFactoryDefaults();
 		// rightBackMotor.restoreFactoryDefaults();
 		// rightFrontMotor.restoreFactoryDefaults();
 
-		rightSide.setInverted(true);
+		
 	}
 
+	//Creates tankDrive
 	public void tankDrive(double leftSpeed, double rightSpeed) {
 		leftSpeed = inputToSpeed(leftSpeed);
 		rightSpeed = inputToSpeed(rightSpeed);
-		drivetrain.tankDrive(leftSpeed, rightSpeed);
+		m_drivetrain.tankDrive(leftSpeed, rightSpeed);
 	}
 
+	//Creates arcadeDrive
 	public void arcadeDrive(double xSpeed, double zRotation) {
 		xSpeed = inputToSpeed(xSpeed);
 		zRotation = inputToSpeed(-zRotation);
-		drivetrain.arcadeDrive(xSpeed, zRotation);
+		m_drivetrain.arcadeDrive(xSpeed, zRotation);
 	}
-
+	
+	//turns controller input into motor speed
 	public double inputToSpeed(double input) {
 		input *= -1;
-		return MathUtil.clamp(input, -maxSpeed, maxSpeed);
+		return MathUtil.clamp(input, -m_maxWheelSpeed, m_maxWheelSpeed);
 	}
 	
 	@Override

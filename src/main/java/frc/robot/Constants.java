@@ -17,11 +17,21 @@ public final class Constants {
         //left ports
 	public final static int leftFrontMotorPort = 1;
     public final static int leftBackMotorPort = 2;
+
         // right ports
     public final static int rightFrontMotorPort = 3;
     public final static int rightBackMotorPort = 4;
+
         // controller port
     public final static int CONTROLLER_PORT = 0;
+        
+        //INPUT_PORT
+    public final static int INPUT_PORT = 0;
+
+        // top and bottom ports
+    public final static int TOP_PORT = 0;
+    public final static int BOTTOM_PORT = 0;
+
 
 
     
