@@ -15,7 +15,7 @@ public class Outtake extends SubsystemBase {
   CANSparkMax topMotor = new CANSparkMax(Constants.TOP_PORT, MotorType.kBrushless);
   CANSparkMax bottomMotor = new CANSparkMax(Constants.BOTTOM_PORT, MotorType.kBrushless);
 
-  double m_motorSpeed = Math.PI;
+  double m_motorSpeed = Math.PI; // random value; change later
   
   //starts outtake motor, top goes backwards, bottom goes forwards
   public void runOuttake() {
