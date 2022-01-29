@@ -7,8 +7,13 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.DriveMod;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -32,17 +37,18 @@ public class Drivetrain extends SubsystemBase {
 	// defines m_maxWheelSpeed self explanatory
 	private final double m_maxWheelSpeed = 1;
 
+	private final ShuffleboardTab m_controlsTab = Shuffleboard.getTab("controls");
+	private final SendableChooser<DriveMod.Mod> m_modChooser = new SendableChooser<DriveMod.Mod>();
+	private final DriveMod m_driveMod = new DriveMod(m_modChooser);
+
 	/** Creates a new Drivetrain */
 	public Drivetrain() {
 		m_drivetrain.setDeadband(0.05);
 		m_drivetrain.setSafetyEnabled(true);
 
 		m_rightSide.setInverted(true);
-		// leftBackMotor.restoreFactoryDefaults();
-		// leftFrontMotor.restoreFactoryDefaults();
-		// rightBackMotor.restoreFactoryDefaults();
-		// rightFrontMotor.restoreFactoryDefaults();
 
+		m_controlsTab.add(m_modChooser);
 	}
 
 	// Creates tankDrive
@@ -53,10 +59,20 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	// Creates arcadeDrive
-	public void arcadeDrive(double xSpeed, double zRotation) {
+	public void arcadeDrive(double xSpeed, double zRotation, boolean modded) {
 		xSpeed = inputToSpeed(xSpeed);
 		zRotation = inputToSpeed(-zRotation);
+
+		if (modded) {
+			xSpeed = m_driveMod.getSpeed(xSpeed, zRotation);
+			zRotation = m_driveMod.getRotation(xSpeed, zRotation);
+		}
+
 		m_drivetrain.arcadeDrive(xSpeed, zRotation);
+	}
+
+	public void arcadeDrive(double xSpeed, double zRotation) {
+		arcadeDrive(xSpeed, zRotation, false);
 	}
 
 	// turns controller input into motor speed
