@@ -17,13 +17,13 @@ public class Drivetrain extends SubsystemBase {
 	// Define motor
 
 	//define left MotorControl group
-	private final CANSparkMax m_leftFrontMotor = new CANSparkMax(Constants.leftFrontMotorPort, MotorType.kBrushless);
-	private final CANSparkMax m_leftBackMotor = new CANSparkMax(Constants.leftBackMotorPort, MotorType.kBrushless);
+	private final CANSparkMax m_leftFrontMotor = new CANSparkMax(Constants.LEFT_FRONT_MOTOR_PORT, MotorType.kBrushless);
+	private final CANSparkMax m_leftBackMotor = new CANSparkMax(Constants.LEFT_BACK_MOTOR_PORT, MotorType.kBrushless);
 	private final MotorControllerGroup m_leftSide = new MotorControllerGroup(m_leftFrontMotor, m_leftBackMotor);
 
 	//defines right MotorControl group
-	private final CANSparkMax m_rightFrontMotor = new CANSparkMax(Constants.rightFrontMotorPort, MotorType.kBrushless);
-	private final CANSparkMax m_rightBackMotor = new CANSparkMax(Constants.rightBackMotorPort, MotorType.kBrushless);
+	private final CANSparkMax m_rightFrontMotor = new CANSparkMax(Constants.RIGHT_FRONT_MOTOR_PORT, MotorType.kBrushless);
+	private final CANSparkMax m_rightBackMotor = new CANSparkMax(Constants.RIGHT_BACK_MOTOR_PORT, MotorType.kBrushless);
 	private final MotorControllerGroup m_rightSide = new MotorControllerGroup(m_rightFrontMotor, m_rightBackMotor);
 
 	//defines m_drivetrain

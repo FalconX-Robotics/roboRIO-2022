@@ -15,12 +15,12 @@ package frc.robot;
 public final class Constants {
     //defines ports
         //left ports
-	public final static int leftFrontMotorPort = 1;
-    public final static int leftBackMotorPort = 2;
+	public final static int LEFT_FRONT_MOTOR_PORT = 1;
+    public final static int LEFT_BACK_MOTOR_PORT = 2;
 
         // right ports
-    public final static int rightFrontMotorPort = 3;
-    public final static int rightBackMotorPort = 4;
+    public final static int RIGHT_FRONT_MOTOR_PORT = 3;
+    public final static int RIGHT_BACK_MOTOR_PORT = 4;
 
         // controller port
     public final static int CONTROLLER_PORT = 0;
