@@ -2,13 +2,13 @@ package frc.robot;
 
 import java.util.function.BiFunction;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class DriveMod {
     private SendableChooser<Mod> m_chooser;
     private final Mod DEFAULT_MOD = Mod.NONE;
-    private static double[] t_map = new double[50];
+    private static double[] tMap = new double[50];
+    private static final double TOLERANCE = 0.2;
 
     public DriveMod(SendableChooser<Mod> chooser) {
         m_chooser = chooser;
@@ -25,18 +25,22 @@ public class DriveMod {
     public double getRotation(double x, double y) {
         return m_chooser.getSelected().rotationSupplier.apply(x, y);
     }
- 
+
+    private static boolean inTolerance(double x) {
+        return x <= TOLERANCE;
+    }
+
     public static enum Mod {
         NONE("NONE", (s, r) -> s, (s, r) -> r),
         STATIONARY("STATIONARY", (s, r) -> 0., (s, r) -> 0.),
-        SLOW("SLOW", (s, r) -> MathUtil.clamp(s, -0.1, 0.1), (s, r) -> MathUtil.clamp(r, -0.1, 0.1)),
-        FAST_ONLY("FAST ONLY", (s, r) -> Math.signum(s), (s, r) -> Math.signum(r)),
+        SLOW("SLOW", (s, r) -> s/10, (s, r) -> r/10),
+        FAST_ONLY("FAST_ONLY", (s, r) -> Math.signum(s), (s, r) -> Math.signum(r)),
         SQUARED("SQUARED", (s, r) -> s*s, (s, r) -> r*r),
-        SIN("SIN", (s, r) -> s, (s, r) -> {
-            t_map[0] += 0.02;
-            return MathUtil.clamp(Math.sin(t_map[0]), -0.5, 0.5);
-        }),
-        SPIN("SPIN", (s, r) -> s, (s, r) -> Math.abs(s) <= 0.2 ? 0.2 : 0.),
+        SIN("SIN",
+            (s, r) -> !inTolerance(s) ? Math.cos(tMap[0])/5 : 0.,
+            (s, r) -> !inTolerance(s) && inTolerance(r) ? Math.sin((tMap[0]+=0.02) - 0.02)/5 : r
+        ),
+        SPIN("SPIN", (s, r) -> s, (s, r) -> inTolerance(s) ? 0.2 : 0.),
         RANDOM("RANDOM", (s, r) -> (Math.random()-0.5)/5, (s, r) -> (Math.random()-0.5)/5);
 
         public final String name;

@@ -43,7 +43,6 @@ public class Drivetrain extends SubsystemBase {
 
 	/** Creates a new Drivetrain */
 	public Drivetrain() {
-		m_drivetrain.setDeadband(0.05);
 		m_drivetrain.setSafetyEnabled(true);
 
 		m_rightSide.setInverted(true);
@@ -77,8 +76,7 @@ public class Drivetrain extends SubsystemBase {
 
 	// turns controller input into motor speed
 	public double inputToSpeed(double input) {
-		input *= -1;
-		return MathUtil.clamp(input, -m_maxWheelSpeed, m_maxWheelSpeed);
+		return MathUtil.clamp(-input, -m_maxWheelSpeed, m_maxWheelSpeed);
 	}
 
 	@Override
