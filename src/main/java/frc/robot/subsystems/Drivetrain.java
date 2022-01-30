@@ -13,13 +13,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 public class Drivetrain extends SubsystemBase {
-	private PigeonIMU pigeon = new PigeonIMU(Constants.pigeonPort);
+	private WPI_PigeonIMU pigeon = new WPI_PigeonIMU(Constants.pigeonPort);
 
 // Define motor
 	// left MotorControl group
