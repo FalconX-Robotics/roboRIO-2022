@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-    private final CANSparkMax m_intake = new CANSparkMax(Constants.INPUT_PORT, MotorType.kBrushless);// Hey look it
+    private final CANSparkMax m_intake = new CANSparkMax(Constants.INPUT_PORT, MotorType.kBrushed);// Hey look it
                                                                                                      // works now
     private final double m_motorSpeed = Math.PI; // random value; change later
 
