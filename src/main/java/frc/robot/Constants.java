@@ -37,4 +37,6 @@ public final class Constants {
     public final static int TOP_PORT = 6; // random value; change later
     public final static int BOTTOM_PORT = 7; // random value; change later
 
+    public final static int LED_CONTROLLER_PORT = 0;
+
 }
