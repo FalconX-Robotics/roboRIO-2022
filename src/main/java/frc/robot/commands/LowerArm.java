@@ -42,4 +42,9 @@ public class LowerArm extends WaitCommand {
     m_intake.disableIntakeArm();
     m_intake.setArmIdleMode(IdleMode.kBrake);
   }
+
+  @Override
+  public boolean runsWhenDisabled() {
+    return false;
+  }
 }
