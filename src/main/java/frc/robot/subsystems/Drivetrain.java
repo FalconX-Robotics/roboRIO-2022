@@ -38,11 +38,6 @@ public class Drivetrain extends SubsystemBase {
 		m_drivetrain.setSafetyEnabled(true);
 
 		m_rightSide.setInverted(true);
-		// leftBackMotor.restoreFactoryDefaults();
-		// leftFrontMotor.restoreFactoryDefaults();
-		// rightBackMotor.restoreFactoryDefaults();
-		// rightFrontMotor.restoreFactoryDefaults();
-
 	}
 
 	// Creates tankDrive
@@ -61,8 +56,7 @@ public class Drivetrain extends SubsystemBase {
 
 	// turns controller input into motor speed
 	public double inputToSpeed(double input) {
-		input *= -1;
-		return MathUtil.clamp(input, -m_maxWheelSpeed, m_maxWheelSpeed);
+		return MathUtil.clamp(-input, -m_maxWheelSpeed, m_maxWheelSpeed);
 	}
 
 	@Override

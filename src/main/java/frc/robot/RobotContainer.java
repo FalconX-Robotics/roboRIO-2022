@@ -59,7 +59,7 @@ public class RobotContainer {
 
 	private void configureButtonBindings() {
 		new JoystickButton(m_driver, XboxController.Button.kA.value)
-				.toggleWhenPressed(new OuttakeCommand(m_outtake));
+				.toggleWhenPressed(new OuttakeCommand(m_outtake, m_outtake.m_motorSpeed));
 		new JoystickButton(m_driver, XboxController.Button.kB.value)
 				.toggleWhenPressed(new IntakeCommand(m_intake));
 
