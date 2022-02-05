@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.LowerArm;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.Drivetrain;
@@ -43,7 +44,7 @@ public class RobotContainer {
 		configureButtonBindings();
 	}
 
-	// Defines outtake subsystem
+	// Defines outtake and intake subsystem
 	private final Outtake m_outtake = new Outtake();
 	private final Intake m_intake = new Intake();
 
@@ -58,9 +59,15 @@ public class RobotContainer {
 
 	private void configureButtonBindings() {
 		new JoystickButton(m_driver, XboxController.Button.kA.value)
-				.toggleWhenPressed(new OuttakeCommand(m_outtake));
+				.toggleWhenPressed(new OuttakeCommand(m_outtake, m_outtake.m_motorSpeed));
 		new JoystickButton(m_driver, XboxController.Button.kB.value)
 				.toggleWhenPressed(new IntakeCommand(m_intake));
+
+		// new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
+		// .toggleWhenPressed(new IntakeCommand(m_armIntake));//set later
+
+		new JoystickButton(m_driver, XboxController.Button.kX.value)
+			.whenPressed(new LowerArm(m_intake));
 	}
 
 	/**

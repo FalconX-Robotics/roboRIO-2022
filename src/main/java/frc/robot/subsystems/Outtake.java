@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,21 +13,24 @@ import frc.robot.Constants;
 
 public class Outtake extends SubsystemBase {
   /** Creates a new Outtake. */
-  private final CANSparkMax topMotor = new CANSparkMax(Constants.TOP_PORT, MotorType.kBrushless);
-  private final CANSparkMax bottomMotor = new CANSparkMax(Constants.BOTTOM_PORT, MotorType.kBrushless);
+  private final CANSparkMax m_topMotor = new CANSparkMax(Constants.TOP_PORT, MotorType.kBrushless);
+  private final CANSparkMax m_bottomMotor = new CANSparkMax(Constants.BOTTOM_PORT, MotorType.kBrushless);
 
-  private final double m_motorSpeed = Math.PI; // random value; change later
-
+  public final double m_motorSpeed = 1; // random value; change later
+  public Outtake() {
+    m_topMotor.setIdleMode(IdleMode.kCoast);
+    m_bottomMotor.setIdleMode(IdleMode.kCoast);
+  }
   // starts outtake motor, top goes backwards, bottom goes forwards
-  public void runOuttake() {
-    topMotor.set(-m_motorSpeed);
-    bottomMotor.set(m_motorSpeed);
+  public void runOuttake(double motorSpeed) {
+    m_topMotor.set(-motorSpeed);
+    m_bottomMotor.set(-motorSpeed);
   }
 
   // stops outtake motor
   public void disableOuttake() {
-    topMotor.set(0);
-    bottomMotor.set(0);
+    m_topMotor.set(0);
+    m_bottomMotor.set(0);
   }
 
 }

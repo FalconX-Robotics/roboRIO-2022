@@ -10,21 +10,24 @@ import frc.robot.subsystems.Outtake;
 public class OuttakeCommand extends CommandBase {
 
   private final Outtake m_outtake;
+  private final double m_motorSpeed;
 
-  public OuttakeCommand(Outtake outtake) {
+  public OuttakeCommand(Outtake outtake, double motorSpeed) {
     m_outtake = outtake;
+    m_motorSpeed = motorSpeed;
     addRequirements(m_outtake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_outtake.runOuttake();
+    m_outtake.runOuttake(m_motorSpeed);
   }
 
   // Called once the command ends or is interrupted.
