@@ -7,8 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.IntakeCommand;
@@ -69,10 +67,7 @@ public class RobotContainer {
 		// .toggleWhenPressed(new IntakeCommand(m_armIntake));//set later
 
 		new JoystickButton(m_driver, XboxController.Button.kX.value)
-			.whenPressed(new SequentialCommandGroup(
-				new LowerArm(m_intake, true), 
-				new WaitCommand(0.5),
-				new LowerArm(m_intake, false)));
+			.whenPressed(new LowerArm(m_intake));
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,6 +33,10 @@ public class Intake extends SubsystemBase {
 
     public void disableIntakeArm() {
         m_intakeArm.set(0);
+    }
+
+    public void setArmIdleMode(IdleMode mode) {
+        m_intakeArm.setIdleMode(mode);
     }
 
 }

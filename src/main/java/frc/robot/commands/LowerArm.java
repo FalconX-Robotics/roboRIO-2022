@@ -4,46 +4,42 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import com.revrobotics.CANSparkMax.IdleMode;
+
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Intake;
 
-public class LowerArm extends CommandBase {
+public class LowerArm extends WaitCommand {
   /** Creates a new IntakeCommand. */
   private final Intake m_intake;
-  private final boolean m_canMove;
+  private final static double k_waitTime = 0.2;
 
-  public LowerArm(Intake intake, boolean canMove) {
+  public LowerArm(Intake intake) {
+    super(k_waitTime);
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
-    m_canMove = canMove;
     addRequirements(m_intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (m_canMove) {
-         m_intake.lowerIntakeArm();
-      } else {
-        m_intake.disableIntakeArm();
-      }
+    super.initialize();
+    m_intake.setArmIdleMode(IdleMode.kCoast);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      
+    super.execute();
+    m_intake.lowerIntakeArm();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.disableIntake();
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return true;
+    super.end(interrupted);
+    m_intake.disableIntakeArm();
+    m_intake.setArmIdleMode(IdleMode.kBrake);
   }
 }
