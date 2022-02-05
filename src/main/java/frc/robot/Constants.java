@@ -29,8 +29,9 @@ public final class Constants {
     // controller port
     public final static int CONTROLLER_PORT = 0;
 
-    // INPUT_PORT
-    public final static int INPUT_PORT = 5; // random value; change later
+    // INTAKE_PORT
+    public final static int INTAKE_PORT = 5; // random value; change later
+    public final static int INTAKE_ARM_MOTOR = 10; //again, random value 
 
     // top and bottom ports
     public final static int TOP_PORT = 6; // random value; change later
