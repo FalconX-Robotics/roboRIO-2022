@@ -30,11 +30,11 @@ public final class Constants {
     public final static int CONTROLLER_PORT = 0;
 
     // INTAKE_PORT
-    public final static int INTAKE_PORT = 5; // random value; change later
-    public final static int INTAKE_ARM_MOTOR = 10; //again, random value 
+    public final static int INTAKE_PORT = 8; // random value; change later
+    public final static int INTAKE_ARM_MOTOR = 5; //again, random value 
 
     // top and bottom ports
-    public final static int TOP_PORT = 6; // random value; change later
-    public final static int BOTTOM_PORT = 7; // random value; change later
+    public final static int TOP_PORT = 7; // random value; change later
+    public final static int BOTTOM_PORT = 6; // random value; change later
 
 }
