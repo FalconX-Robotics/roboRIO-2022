@@ -33,14 +33,14 @@ public class DriveMod {
     public static enum Mod {
         NONE("NONE", (s, r) -> s, (s, r) -> r),
         STATIONARY("STATIONARY", (s, r) -> 0., (s, r) -> 0.),
-        SLOW("SLOW", (s, r) -> s/10, (s, r) -> r/10),
-        FAST_ONLY("FAST_ONLY", (s, r) -> Math.signum(s), (s, r) -> Math.signum(r)),
-        SQUARED("SQUARED", (s, r) -> s*s, (s, r) -> r*r),
+        SLOW("SLOW", (s, r) -> s/4., (s, r) -> r/4.),
+        FAST_ONLY("FAST_ONLY", (s, r) -> inTolerance(s) ? 0. : Math.signum(s), (s, r) -> inTolerance(r) ? 0. : Math.signum(r)),
+        SQUARED("SQUARED", (s, r) -> s*s * Math.signum(s), (s, r) -> r*r * Math.signum(r)),
         SIN("SIN",
             (s, r) -> !inTolerance(s) ? Math.cos(tMap[0])/5 : 0.,
             (s, r) -> !inTolerance(s) && inTolerance(r) ? Math.sin((tMap[0]+=0.02) - 0.02)/5 : r
         ),
-        SPIN("SPIN", (s, r) -> s, (s, r) -> inTolerance(s) ? 0.2 : 0.),
+        SPIN("SPIN", (s, r) -> s, (s, r) -> inTolerance(s) ? 0.4 : 0.),
         RANDOM("RANDOM", (s, r) -> (Math.random()-0.5)/5, (s, r) -> (Math.random()-0.5)/5);
 
         public final String name;
