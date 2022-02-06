@@ -12,9 +12,10 @@ public class Camera extends SubsystemBase {
     private NetworkTableEntry m_captureEntry = SmartDashboard.getEntry("Camera/Capture");
     // yaw is the angle displaced from the target. 360 means target is not in sight
     private NetworkTableEntry m_yawEntry = SmartDashboard.getEntry("Camera/Yaw");
-    // x distance from the target. -1 means target is not in sight
+    // x distance from the target. -1 means target is not in sight */
     private NetworkTableEntry m_distanceEntry = SmartDashboard.getEntry("Camera/Distance");
     
+
     public Camera() {
         
     }
