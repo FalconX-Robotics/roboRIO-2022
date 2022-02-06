@@ -4,39 +4,36 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Outtake;
 
-public class ArcadeDrive extends CommandBase {
+public class OuttakeCommand extends CommandBase {
 
-  private final Drivetrain m_drivetrain;
-  private final XboxController m_driver;
+  private final Outtake m_outtake;
+  private final double m_motorSpeed;
 
-  /** Creates a new ArcadeDrive. */
-
-  public ArcadeDrive(Drivetrain drivetrain, XboxController driver) {
-    m_drivetrain = drivetrain;
-    m_driver = driver;
-    addRequirements(m_drivetrain);
-    // Use addRequirements() here to declare subsystem dependencies.
+  public OuttakeCommand(Outtake outtake, double motorSpeed) {
+    m_outtake = outtake;
+    m_motorSpeed = motorSpeed;
+    addRequirements(m_outtake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.arcadeDrive(m_driver.getLeftY(), m_driver.getRightX(), true);
+    m_outtake.runOuttake(m_motorSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.arcadeDrive(0, 0);
+    m_outtake.disableOuttake();
   }
 
   // Returns true when the command should end.

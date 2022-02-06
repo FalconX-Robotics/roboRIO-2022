@@ -4,44 +4,46 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import com.revrobotics.CANSparkMax.IdleMode;
 
-public class ArcadeDrive extends CommandBase {
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.Intake;
 
-  private final Drivetrain m_drivetrain;
-  private final XboxController m_driver;
+public class LowerArm extends WaitCommand {
+  /** Creates a new IntakeCommand. */
+  private final Intake m_intake;
+  private final static double k_waitTime = 0.2;
 
-  /** Creates a new ArcadeDrive. */
-
-  public ArcadeDrive(Drivetrain drivetrain, XboxController driver) {
-    m_drivetrain = drivetrain;
-    m_driver = driver;
-    addRequirements(m_drivetrain);
+  public LowerArm(Intake intake) {
+    super(k_waitTime);
     // Use addRequirements() here to declare subsystem dependencies.
+    m_intake = intake;
+    addRequirements(m_intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    super.initialize();
+    m_intake.setArmIdleMode(IdleMode.kCoast);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.arcadeDrive(m_driver.getLeftY(), m_driver.getRightX(), true);
+    super.execute();
+    m_intake.lowerIntakeArm();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.arcadeDrive(0, 0);
+    super.end(interrupted);
+    m_intake.disableIntakeArm();
   }
 
-  // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
+  public boolean runsWhenDisabled() {
     return false;
   }
 }
