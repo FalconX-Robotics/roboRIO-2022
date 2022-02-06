@@ -19,8 +19,11 @@ import frc.robot.Constants;
 import frc.robot.DriveMod;
 
 public class Drivetrain extends SubsystemBase {
-	private WPI_PigeonIMU pigeon = new WPI_PigeonIMU(Constants.PIGEON_PORT);
 
+	// Gyro
+	private WPI_PigeonIMU pigeon = new WPI_PigeonIMU(Constants.PIGEON_PORT);
+	private final NetworkTableEntry m_drivetrainGyroRawEntry = SmartDashboard.getEntry("Drivetrain/Gyro Raw");
+	private final NetworkTableEntry m_drivetrainGyroEntry = SmartDashboard.getEntry("Drivetrain/Gyro Raw");
 	private final NetworkTableEntry m_cameraGyroRawEntry = SmartDashboard.getEntry("Camera/Gyro Raw");
 	private final NetworkTableEntry m_cameraGyroEntry = SmartDashboard.getEntry("Camera/Gyro");
 	
@@ -40,7 +43,9 @@ public class Drivetrain extends SubsystemBase {
 	// defines m_drivetrain
 	private final DifferentialDrive m_drivetrain = new DifferentialDrive(m_leftSide, m_rightSide);
 
-	// defines m_maxWheelSpeed self explanatory
+	private final NetworkTableEntry m_leftSideOutputEntry = SmartDashboard.getEntry("Drivetrain/Left Side Output");
+	private final NetworkTableEntry m_rightSideOutputEntry = SmartDashboard.getEntry("Drivetrain/Right Side Output");
+
 	private final double m_maxWheelSpeed = 1;
 
 	private final SendableChooser<DriveMod.Mod> m_modChooser = new SendableChooser<DriveMod.Mod>();
@@ -105,8 +110,13 @@ public class Drivetrain extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		m_drivetrainGyroRawEntry.setDouble(gyroYaw());
+		m_drivetrainGyroEntry.setDouble(gyroYaw());
 		m_cameraGyroRawEntry.setDouble(gyroYaw());
 		m_cameraGyroEntry.setDouble(gyroYaw());
+
+		m_leftSideOutputEntry.setDouble(m_leftSide.get());
+		m_rightSideOutputEntry.setDouble(m_rightSide.get());
 	}
 
 	@Override
