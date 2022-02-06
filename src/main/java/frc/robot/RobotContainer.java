@@ -7,10 +7,8 @@ package frc.robot;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.IntakeCommand;
@@ -32,40 +30,36 @@ import frc.robot.subsystems.Outtake;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-	// Defines drivetrain and the xbox controller
+	// Defines controller and subsystems
 	private final XboxController m_driver = new XboxController(Constants.CONTROLLER_PORT);
 	private final Drivetrain m_drivetrain = new Drivetrain();
+	private final Outtake m_outtake = new Outtake();
+	private final Intake m_intake = new Intake();
 	
-	@SuppressWarnings("unused")
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
 	@SuppressWarnings("unused")
 	private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, m_driver);
 
-	private final TurnAngle m_turnAngle = new TurnAngle(90, m_drivetrain, 0.5);
-	private final ShuffleboardTab m_visionTab = Shuffleboard.getTab("vision");
-	private final NetworkTableEntry m_visionPField = m_visionTab.addPersistent("P", 0.).getEntry();
-	private final NetworkTableEntry m_visionIField = m_visionTab.addPersistent("I", 0.).getEntry();
-	private final NetworkTableEntry m_visionDField = m_visionTab.addPersistent("D", 0.).getEntry();
+	private final NetworkTableEntry m_visionPField = SmartDashboard.getEntry("Drivetrain/P");
+	private final NetworkTableEntry m_visionIField = SmartDashboard.getEntry("Drivetrain/I");
+	private final NetworkTableEntry m_visionDField = SmartDashboard.getEntry("Drivetrain/D");
+	private final NetworkTableEntry m_visionFField = SmartDashboard.getEntry("Drivetrain/F");
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer() {
 		m_drivetrain.setDefaultCommand(m_arcadeDrive);
 
-		m_visionTab.add("TurnAngle", new InstantCommand(() -> {
-			m_turnAngle.setPID(m_visionPField.getDouble(0), m_visionIField.getDouble(0), m_visionDField.getDouble(0));
-			m_turnAngle.schedule();
-		}).withName("TurnAngle"));
-		m_visionTab.add("End", new InstantCommand(() -> {
-			m_turnAngle.cancel();
-		}).withName("End TurnAngle"));
+		SmartDashboard.putData("Drivetrain/TurnAngle", new TurnAngle(90, m_drivetrain, 0.5) {
+			@Override
+			public void initialize() {
+				super.initialize();
+				setPIDF(m_visionPField.getDouble(0), m_visionIField.getDouble(0), m_visionDField.getDouble(0), m_visionFField.getDouble(0));
+			}
+		});
 
 		// Configure the button bindings
 		configureButtonBindings();
 	}
-
-	// Defines outtake and intake subsystem
-	private final Outtake m_outtake = new Outtake();
-	private final Intake m_intake = new Intake();
 
 	/**
 	 * Use this method to define your button->command mappings. Buttons can be

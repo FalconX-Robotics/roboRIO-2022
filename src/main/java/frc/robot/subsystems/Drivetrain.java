@@ -12,9 +12,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.DriveMod;
@@ -22,8 +21,8 @@ import frc.robot.DriveMod;
 public class Drivetrain extends SubsystemBase {
 	private WPI_PigeonIMU pigeon = new WPI_PigeonIMU(Constants.PIGEON_PORT);
 
-	private final ShuffleboardTab m_visionTab = Shuffleboard.getTab("vision");
-	private final NetworkTableEntry m_visionGyroEntry = m_visionTab.add("Gyro", 0.).getEntry();
+	private final NetworkTableEntry m_cameraGyroRawEntry = SmartDashboard.getEntry("Camera/Gyro Raw");
+	private final NetworkTableEntry m_cameraGyroEntry = SmartDashboard.getEntry("Camera/Gyro");
 	
 	// Define motor
 
@@ -44,7 +43,6 @@ public class Drivetrain extends SubsystemBase {
 	// defines m_maxWheelSpeed self explanatory
 	private final double m_maxWheelSpeed = 1;
 
-	private final ShuffleboardTab m_controlsTab = Shuffleboard.getTab("controls");
 	private final SendableChooser<DriveMod.Mod> m_modChooser = new SendableChooser<DriveMod.Mod>();
 	private final DriveMod m_driveMod = new DriveMod(m_modChooser);
 
@@ -54,7 +52,7 @@ public class Drivetrain extends SubsystemBase {
 
 		m_rightSide.setInverted(true);
 
-		m_controlsTab.add(m_modChooser);
+		SmartDashboard.putData("Drivetrain/Mod Chooser", m_modChooser);
 	}
 
 	// Creates tankDrive
@@ -107,7 +105,8 @@ public class Drivetrain extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		m_visionGyroEntry.setDouble(gyroYaw());
+		m_cameraGyroRawEntry.setDouble(gyroYaw());
+		m_cameraGyroEntry.setDouble(gyroYaw());
 	}
 
 	@Override
