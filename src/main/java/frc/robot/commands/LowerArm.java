@@ -40,7 +40,6 @@ public class LowerArm extends WaitCommand {
   public void end(boolean interrupted) {
     super.end(interrupted);
     m_intake.disableIntakeArm();
-    m_intake.setArmIdleMode(IdleMode.kBrake);
   }
 
   @Override
