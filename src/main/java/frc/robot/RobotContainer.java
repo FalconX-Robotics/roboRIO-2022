@@ -16,6 +16,8 @@ import frc.robot.commands.LowerArm;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
+import frc.robot.commands.runConveyor;
+import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Outtake;
@@ -35,6 +37,7 @@ public class RobotContainer {
 	private final Drivetrain m_drivetrain = new Drivetrain();
 	private final Outtake m_outtake = new Outtake();
 	private final Intake m_intake = new Intake();
+	private final Connection m_connection = new Connection();
 	
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
 	@SuppressWarnings("unused")
@@ -81,6 +84,9 @@ public class RobotContainer {
 
 		new JoystickButton(m_driver, XboxController.Button.kX.value)
 			.whenPressed(new LowerArm(m_intake));
+			
+		new JoystickButton(m_driver, XboxController.Button.kY.value)
+			.toggleWhenPressed(new runConveyor(m_connection));
 	}
 
 	/**
