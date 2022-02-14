@@ -52,8 +52,8 @@ public class RobotContainer {
 		SmartDashboard.putData("Drivetrain/TurnAngle", new TurnAngle(90, m_drivetrain, 0.5) {
 			@Override
 			public void initialize() {
-				super.initialize();
 				setPIDF(m_visionPField.getDouble(0), m_visionIField.getDouble(0), m_visionDField.getDouble(0), m_visionFField.getDouble(0));
+				super.initialize();
 			}
 		});
 
