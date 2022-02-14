@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Connection;
 
-public class runConveyor extends CommandBase {
+public class RunConveyor extends CommandBase {
   // create object for subsystem
   private final Connection m_connection;
   /** Creates a new runConveyor. */
-  public runConveyor(Connection connection) {
+  public RunConveyor(Connection connection) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_connection = connection;
   }
