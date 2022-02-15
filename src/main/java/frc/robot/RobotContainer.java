@@ -16,7 +16,7 @@ import frc.robot.commands.LowerArm;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
-import frc.robot.commands.runConveyor;
+import frc.robot.commands.RunConveyor;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -86,7 +86,7 @@ public class RobotContainer {
 			.whenPressed(new LowerArm(m_intake));
 			
 		new JoystickButton(m_driver, XboxController.Button.kY.value)
-			.toggleWhenPressed(new runConveyor(m_connection));
+			.toggleWhenPressed(new RunConveyor(m_connection));
 	}
 
 	/**
