@@ -43,6 +43,6 @@ public final class Constants {
     public final static int CONNECTION_PORT = 9;
 
     // led controller port
-    public final static int LED_CONTROLLER_PORT = 0;
+    public final static int LED_CONTROLLER_PORT = 9;
 
 }

@@ -9,7 +9,7 @@ public class LedControl {
         kNone(0.0), kViolet(0.91), kRed(0.61), kBreathBlue(-0.15), kRainbow(-0.99), kRainbowParty(-0.97),
         kRainbowGlitter(-0.89), kConfetti(-0.87), kSinelonRainbow(-0.79), kBPMRainbow(-0.69), kFireLarge(-0.57),
         kTwinklesRainbow(-0.55), kColorWavesRainbow(-0.45), kLarsonScanner(-0.35), kLightChase(-0.29), 
-        kShot(0.13);
+        kShot(0.13), kBlack(0.99);
 
         private Double speed;
 
