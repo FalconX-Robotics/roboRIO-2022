@@ -6,10 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Camera;
+import frc.robot.subsystems.Led;
+import frc.robot.subsystems.Led.Pattern;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -22,8 +24,9 @@ import frc.robot.subsystems.Camera;
  */
 public class RobotContainer {
 	// Defines controller and subsystems
-	private final XboxController m_driver = new XboxController(Constants.CONTROLLER_PORT);
+	// private final XboxController m_driver = new XboxController(Constants.CONTROLLER_PORT);
 	private final Camera m_camera = new Camera();
+	private final Led m_led = new Led();
 	// private final Drivetrain m_drivetrain = new Drivetrain();
 	// private final Outtake m_outtake = new Outtake();
 	// private final Intake m_intake = new Intake();
@@ -78,12 +81,16 @@ public class RobotContainer {
 		// new JoystickButton(m_driver, XboxController.Button.kY.value)
 		// 	.toggleWhenPressed(new RunConveyor(m_connection));
 
-		new JoystickButton(m_driver, XboxController.Button.kX.value).whenPressed(new InstantCommand(
+		SmartDashboard.putData("Camera/PrintValues", new InstantCommand( 
 			() -> {
 				System.out.println("Target distance: " + m_camera.targetDistance());
 				System.out.println("Target yaw: " + m_camera.targetYaw());
 			}
-		));
+		).withName("PrintValues"));
+	}
+
+	public void setLed(Pattern pattern) {
+		m_led.setLed(pattern);
 	}
 
 	/**

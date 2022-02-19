@@ -28,12 +28,12 @@ public class TurnToTarget extends TurnAngle {
     
     // deprecated way. which uses camera.getYaw() as a setpoint source
     protected double setpointSource() {        // latency could be possible issue
-        if (m_camera.fastTargetYaw() == m_camera.kAngleNotViewable) {
+        if (m_camera.targetYaw() == m_camera.kAngleNotViewable) {
             m_maxSpeed = kNotViewableMaxSpeed;
             return kNotViewableSetpoint; // keep spinning until target is viewable
         }
         m_maxSpeed = m_maxSpeedCopy;
-        return m_drivetrain.gyroYaw() + m_camera.fastTargetYaw();
+        return m_drivetrain.gyroYaw() + m_camera.targetYaw();
     }
 
     @Override
