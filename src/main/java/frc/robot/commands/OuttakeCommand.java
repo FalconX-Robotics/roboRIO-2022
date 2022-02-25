@@ -27,13 +27,13 @@ public class OuttakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_outtake.runOuttake(m_motorSpeed);
+    m_outtake.runMotors(m_motorSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_outtake.disableOuttake();
+    m_outtake.disableMotors();
   }
 
   // Returns true when the command should end.
