@@ -23,8 +23,8 @@ public class Outtake extends SubsystemBase {
   }
   // starts outtake motor, top goes backwards, bottom goes forwards
   public void runOuttake(double motorSpeed) {
-    m_topMotor.set(-motorSpeed);
-    m_bottomMotor.set(-motorSpeed);
+    m_topMotor.set(motorSpeed);
+    m_bottomMotor.set(motorSpeed);
   }
 
   // stops outtake motor
