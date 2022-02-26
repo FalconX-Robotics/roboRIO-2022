@@ -17,7 +17,7 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    // defines ports
+    // piegon ports
     public final static int PIGEON_PORT = 42;
 
     // left ports
@@ -41,4 +41,8 @@ public final class Constants {
 
     // conveyor motor port
     public final static int CONNECTION_PORT = 9;
+
+    // led controller port
+    public final static int LED_CONTROLLER_PORT = 9;
+
 }
