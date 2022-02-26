@@ -26,11 +26,11 @@ public class Outtake extends SubsystemBase {
 	}
 	
 	public void runBottomMotor(double speed) {
-		m_bottomMotor.set(-speed);
+		m_bottomMotor.set(speed);
 	}
 	
 	public void runTopMotor(double speed) {
-		m_topMotor.set(-speed);
+		m_topMotor.set(speed);
 	}
 	
 	public void runMotors(double bottomSpeed, double topSpeed) {

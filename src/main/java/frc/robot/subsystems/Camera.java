@@ -11,9 +11,9 @@ public class Camera extends SubsystemBase {
     public final double kPitchNotViewable = -3600;
     public final double kDistanceNotViewable = -1000;
 
-    private final double kTargetHeight = 66;
-    private final double kCameraHeight = 3;
-    private final double kCameraAngle = 0;
+    private final double kTargetHeight = 100 * 2.54;
+    private final double kCameraHeight = 61;
+    private final double kCameraAngle = (90-65) * (Math.PI / 160);
 
     private NetworkTable m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     private NetworkTableEntry m_XEntry = m_limelightTable.getEntry("tx");
