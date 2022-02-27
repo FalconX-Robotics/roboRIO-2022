@@ -9,15 +9,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.AutoShoot;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LowerArm;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RunConveyor;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
+import frc.robot.commands.TurnToTarget;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
@@ -45,7 +46,6 @@ public class RobotContainer {
 	private final Intake m_intake = new Intake();
 	private final Connection m_connection = new Connection();
 	
-	@SuppressWarnings("unused")
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
 	@SuppressWarnings("unused")
 	private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, m_driver);
@@ -74,6 +74,9 @@ public class RobotContainer {
 			}
 		}.withName("TurnAngle Modified"));
 
+		SmartDashboard.putData("Drivetrain/AutoShoot", new AutoShoot(m_outtake, m_camera));
+		SmartDashboard.putData("Drivetrain/TurnToTarget", new TurnToTarget(m_drivetrain, m_camera));
+
 		// Configure the button bindings
 		configureButtonBindings();
 	}
@@ -98,13 +101,6 @@ public class RobotContainer {
 			
 		new JoystickButton(m_driver, XboxController.Button.kY.value)
 			.toggleWhenPressed(new RunConveyor(m_connection));
-
-		SmartDashboard.putData("Camera/PrintValues", new InstantCommand( 
-			() -> {
-				System.out.println("Target distance: " + m_camera.targetDistance());
-				System.out.println("Target yaw: " + m_camera.targetYaw());
-			}
-		).withName("PrintValues"));
 	}
 
 	public void setLed(Pattern pattern) {

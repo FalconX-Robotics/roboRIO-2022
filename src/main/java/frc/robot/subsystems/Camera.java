@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -7,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Camera extends SubsystemBase {
-    public final double kAngleNotViewable = 3600;
+    public final double kYawNotViewable = 3600;
     public final double kPitchNotViewable = -3600;
     public final double kDistanceNotViewable = -1000;
 
@@ -27,37 +29,32 @@ public class Camera extends SubsystemBase {
     public Camera() {
     }
 
-    public double targetYaw() { // in degrees
-        return targetYaw(m_XEntry.getDouble(kAngleNotViewable));
+    public Optional<Double> targetYaw() { // in degrees
+        return targetYaw(m_XEntry.getDouble(kYawNotViewable));
     }
 
-    public double targetYaw(double x) { // in degrees
-        // double nx = (1./160) * (px - 159.5);
-        // double vpw = 2.0*Math.tan(kHorizontalFov/2);
-        // return Math.atan2(1., nx * vpw/2);
-        if (m_AEntry.getDouble(0.) == 0.) {
-            return kAngleNotViewable;
+    public Optional<Double> targetYaw(double x) { // in degrees
+        if (x == kYawNotViewable || m_AEntry.getDouble(0.) == 0.) {
+            return Optional.empty();
         }
-        return x;
+        return Optional.of(x);
     }
 
-    public double targetDistance() {
+    public Optional<Double> targetDistance() {
         return targetDistance(m_YEntry.getDouble(kPitchNotViewable));
     }
 
-    public double targetDistance(double y) {
-        // double ny = (1./120) * (119.5 - py);
-        // double vph = 2.0*Math.tan(kVerticalFov/2);
-        // double y = vph/2 * ny;
-        // double pitch = Math.atan2(1, y);
-        if ((y + kCameraAngle) < 0 || m_AEntry.getDouble(0.) == 0.) return kDistanceNotViewable;
+    public Optional<Double> targetDistance(double y) {
         double pitch = y * (Math.PI / 160); // in radian
-        return (kTargetHeight - kCameraHeight) / (Math.tan(pitch + kCameraAngle));
+        if (y == kPitchNotViewable
+            || (pitch + kCameraAngle) <= 0
+            || m_AEntry.getDouble(0.) == 0.) return Optional.empty();
+        return Optional.of((kTargetHeight - kCameraHeight) / (Math.tan(pitch + kCameraAngle)));
     }
 
     @Override
     public void periodic() {
-        m_yawEntry.setDouble(targetYaw());
-        m_distanceEntry.setDouble(targetDistance());
+        m_yawEntry.setDouble((targetYaw().or(() -> Optional.of(kYawNotViewable))).get());
+        m_distanceEntry.setDouble((targetDistance().or(() -> Optional.of(kDistanceNotViewable))).get());
     }
 }

@@ -8,17 +8,16 @@ import frc.robot.subsystems.Outtake;
 
 
 public class AutoShoot extends WaitCommand {
-    private final static double k_shootTime = 2;
+    private final static double k_shootTime = 3;
     private final double k_minDistance = 0;
 
-    private MotorSpeed[] motorSpeeds = new MotorSpeed[] {
+    private MotorSpeed[] m_motorSpeeds = new MotorSpeed[] {
         new MotorSpeed(0, 0, 0),
         new MotorSpeed(5, 0.3, 0.25),
         new MotorSpeed(10, 0.6, 0.5),
         new MotorSpeed(20, 0.9, 0.75)
     };
 
-    private double m_targetDistance = 0;
     private MotorSpeed m_motorSpeed;
     private Outtake m_outtake;
     private Camera m_camera;
@@ -27,7 +26,6 @@ public class AutoShoot extends WaitCommand {
         super(k_shootTime);
         m_outtake = outtake;
         m_camera = camera;
-        m_targetDistance = camera.kDistanceNotViewable;
     }
 
     private class MotorSpeed {
@@ -45,11 +43,11 @@ public class AutoShoot extends WaitCommand {
     }
 
     private Optional<MotorSpeed> getMotorSpeed(double distance) {
-        if (distance <= k_minDistance) return Optional.empty();
-        for (int i = 0; i < motorSpeeds.length-1; i++) {
-            MotorSpeed lowerSpeed = motorSpeeds[i];
+        if (distance <= k_minDistance || distance > m_motorSpeeds[m_motorSpeeds.length-1].distance) return Optional.empty();
+        for (int i = 0; i < m_motorSpeeds.length-1; i++) {
+            MotorSpeed lowerSpeed = m_motorSpeeds[i];
             if (lowerSpeed.distance <= distance) {
-                MotorSpeed upperSpeed = motorSpeeds[i+1];
+                MotorSpeed upperSpeed = m_motorSpeeds[i+1];
                 double bottom = approxSpeed(distance, lowerSpeed.distance, lowerSpeed.bottom, upperSpeed.distance, upperSpeed.bottom);
                 double top = approxSpeed(distance, lowerSpeed.distance, lowerSpeed.top, upperSpeed.distance, upperSpeed.top);
 
@@ -62,13 +60,18 @@ public class AutoShoot extends WaitCommand {
     @Override
     public void initialize() {
         super.initialize();
-        m_targetDistance = m_camera.targetDistance();
-        Optional<MotorSpeed> maybeSpeed = getMotorSpeed(m_targetDistance);
-        if (maybeSpeed.isPresent()) {
-            m_motorSpeed = maybeSpeed.get();
-        } else {
+        Optional<Double> targetDistance = m_camera.targetDistance();
+        if (targetDistance.isEmpty()) {
             this.cancel();
+            return;
         }
+
+        Optional<MotorSpeed> motorSpeed = getMotorSpeed(targetDistance.get());
+        if (motorSpeed.isEmpty()) {
+            this.cancel();
+            return;
+        }
+        m_motorSpeed = motorSpeed.get();
     }
 
     @Override
@@ -87,5 +90,4 @@ public class AutoShoot extends WaitCommand {
     public boolean runsWhenDisabled() {
         return false;
     }
-
 }

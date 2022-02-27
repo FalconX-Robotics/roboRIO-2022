@@ -55,7 +55,6 @@ public class TurnAngle extends PIDCommand {
 
     @Override
     public void initialize() {
-        // System.out.println("TurnAngle initalized");
         m_useOutput = output -> m_drivetrain.arcadeDrive(0, -m_F*Math.signum(output) - MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed));
         m_drivetrain.resetGyroYaw();
     }
@@ -63,7 +62,6 @@ public class TurnAngle extends PIDCommand {
     @Override
     public void execute() {
         super.execute();
-        // System.out.println("TurnAngle (Gyro & Setpoint) " + m_drivetrain.gyroYaw() + " " + m_controller.getSetpoint());
         m_setpointField.setDouble(m_setpoint.getAsDouble());
         m_processedField.setDouble(m_drivetrain.gyroYaw());
         m_errorField.setDouble(m_controller.getPositionError());
@@ -77,7 +75,6 @@ public class TurnAngle extends PIDCommand {
 
     @Override
     public void end(boolean interrupted) {
-        // System.out.println("TurnAngle ended (interrupted) " + interrupted);
         m_errorField.setDouble(360);
     }
 }
