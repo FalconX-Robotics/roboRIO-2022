@@ -35,13 +35,11 @@ public class DriveMod {
         STATIONARY("STATIONARY", (s, r) -> 0., (s, r) -> 0.),
         SLOW("SLOW", (s, r) -> s/3., (s, r) -> r/3.),
         FAST_ONLY("FAST_ONLY", (s, r) -> inTolerance(s) ? 0. : Math.signum(s), (s, r) -> inTolerance(r) ? 0. : Math.signum(r)),
-        SQUARED("SQUARED", (s, r) -> s*s * Math.signum(s), (s, r) -> r*r * Math.signum(r)),
         SIN("SIN",
             (s, r) -> !inTolerance(s) && !inTolerance(r) ? Math.cos(tMap[0])/2. : 0.,
             (s, r) -> !inTolerance(s) && !inTolerance(r) ? Math.sin((tMap[0]+=0.02) - 0.02)/2. : r
         ),
-        SPIN("SPIN", (s, r) -> s, (s, r) -> inTolerance(s) ? 0.4 : 0.),
-        RANDOM("RANDOM", (s, r) -> (Math.random()-0.5)/3., (s, r) -> (Math.random()-0.5)/3.);
+        SPIN("SPIN", (s, r) -> s, (s, r) -> inTolerance(s) ? 0.4 : 0.);
 
         public final String name;
         public final BiFunction<Double, Double, Double> speedSupplier, rotationSupplier;
