@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import java.util.Optional;
+import java.util.OptionalDouble;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,9 +25,9 @@ public class TurnToTarget extends TurnAngle {
 
     @Override
     public void initialize() {
-        Optional<Double> distance = m_camera.targetDistance();
+        OptionalDouble distance = m_camera.targetDistance();
         if (distance.isPresent()) {
-            setSetpoint(distance.get());
+            setSetpoint(distance.getAsDouble());
         } else {
             this.cancel();
         }

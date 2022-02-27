@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import java.util.Optional;
+import java.util.OptionalDouble;
 
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Camera;
@@ -60,13 +61,13 @@ public class AutoShoot extends WaitCommand {
     @Override
     public void initialize() {
         super.initialize();
-        Optional<Double> targetDistance = m_camera.targetDistance();
+        OptionalDouble targetDistance = m_camera.targetDistance();
         if (targetDistance.isEmpty()) {
             this.cancel();
             return;
         }
 
-        Optional<MotorSpeed> motorSpeed = getMotorSpeed(targetDistance.get());
+        Optional<MotorSpeed> motorSpeed = getMotorSpeed(targetDistance.getAsDouble());
         if (motorSpeed.isEmpty()) {
             this.cancel();
             return;
