@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoShoot;
 import frc.robot.commands.IntakeCommand;
@@ -101,6 +102,10 @@ public class RobotContainer {
 			
 		new JoystickButton(m_driver, XboxController.Button.kY.value)
 			.toggleWhenPressed(new RunConveyor(m_connection));
+		
+		// bind AimAndShoot to the right bumper
+		new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
+			.whenPressed(new AimAndShoot(m_drivetrain, m_outtake, m_camera));
 	}
 
 	public void setLed(Pattern pattern) {
