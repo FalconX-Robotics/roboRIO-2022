@@ -24,7 +24,7 @@ public class TurnAngle extends PIDCommand {
      */
     public TurnAngle(DoubleSupplier setpointSupplier, Drivetrain drivetrain) {
         super(new PIDController(0, 0, 0),
-            drivetrain::gyroYaw,
+            () -> 0.,
             0.,
             output -> {},
             drivetrain);
@@ -56,7 +56,14 @@ public class TurnAngle extends PIDCommand {
         double setpoint = m_setpointSupplier.getAsDouble();
         m_useOutput = output -> m_drivetrain.arcadeDrive(0, -m_F*Math.signum(output) - MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed));
         m_setpoint = () -> setpoint;
-        m_drivetrain.resetGyroYaw();
+        
+        double initGyro = m_drivetrain.gyroYawRaw();
+        m_measurement = () -> {
+            double yaw = m_drivetrain.gyroYawRaw() - initGyro;
+            yaw %= 360;
+            if (yaw < 0) yaw += 360;
+            return yaw <= 180 ? yaw : -360 + yaw;
+        };
     }
 
     @Override

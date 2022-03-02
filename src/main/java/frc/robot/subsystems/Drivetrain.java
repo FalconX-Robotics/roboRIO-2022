@@ -62,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
 		m_rightSide.setInverted(true);
 
 		SmartDashboard.putData("Drivetrain/Mod", m_modChooser);
-		m_odometry = new DifferentialDriveOdometry(getRotation(), new Pose2d(0, 0, new Rotation2d()));
+		m_odometry = new DifferentialDriveOdometry(gyroRotation(), new Pose2d(0, 0, new Rotation2d()));
 	}
 
 	// Creates tankDrive
@@ -98,6 +98,10 @@ public class Drivetrain extends SubsystemBase {
 		return MathUtil.clamp(-input, -m_maxWheelSpeed, m_maxWheelSpeed);
 	}
 
+	public void setOdometry(Pose2d pose, Rotation2d gyro) {
+		m_odometry.resetPosition(pose, gyro);
+	}
+
 	public Pose2d getPose() {
 		return m_odometry.getPoseMeters();
 	}
@@ -118,7 +122,7 @@ public class Drivetrain extends SubsystemBase {
 		return yaw <= 180 ? yaw : -360 + yaw;
 	}
 
-	public Rotation2d getRotation() {
+	public Rotation2d gyroRotation() {
 		return Rotation2d.fromDegrees(gyroYaw());
 	}
 
@@ -144,10 +148,12 @@ public class Drivetrain extends SubsystemBase {
 
 	public DifferentialDriveWheelSpeeds getWheelSpeeds() {
 		return new DifferentialDriveWheelSpeeds(leftEncoderDistance(), rightEncoderDistance());
-	} 
+	}
 
 	@Override
 	public void periodic() {
+		m_odometry.update(gyroRotation(), leftEncoderDistance(), rightEncoderDistance());
+		
 		m_drivetrainGyroEntry.setDouble(gyroYaw());
 		m_cameraGyroEntry.setDouble(gyroYaw());
 		m_turnAngleGyroEntry.setDouble(gyroYaw());

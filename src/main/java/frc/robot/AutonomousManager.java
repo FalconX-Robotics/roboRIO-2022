@@ -18,7 +18,7 @@ import frc.robot.subsystems.Outtake;
 public class AutonomousManager {
     
     public enum Path {
-        NONE, TAXI, ONE_BALL, TWO_BALL;
+        NONE, TAXI, ONE_BALL, ONE_BALL_TAXI, TWO_BALL_TAXI;
     }
     
     public enum InitialPose {
@@ -37,7 +37,9 @@ public class AutonomousManager {
 
     public final InitialPose DEFAULT_INIT_POSE = InitialPose.INVALID;
     public final Path DEFAULT_PATH = Path.NONE;
+
     private final SequentialCommandGroup m_turnAndShoot;
+    private final Command m_turnBack;
 
     private final double TAXI_DRIVE_DISTANCE = 1;
 
@@ -55,6 +57,7 @@ public class AutonomousManager {
         m_camera = camera;
 
         m_turnAndShoot = new SequentialCommandGroup(new TurnToTarget(m_drivetrain, m_camera), new AutoShoot(m_outtake, m_camera));
+        m_turnBack = new TurnAngle(() -> -m_drivetrain.getPose().getRotation().getDegrees(), m_drivetrain);
     }
 
     public AutonomousManager(Path path, InitialPose initPose, Drivetrain drivetrain, Outtake outtake, Camera camera) {
@@ -70,12 +73,13 @@ public class AutonomousManager {
     }
 
     public double getAngleToBall() {
-        // Ball ball = getClosestBall();
+        Ball ball = getClosestBall();
         return 0; // fix 
     }
 
     public double getDistanceToBall() {
-        return 0; // fix
+        Ball ball = getClosestBall();
+        return ball.m_position.getDistance(m_drivetrain.getPose().getTranslation()); // fix
     }
 
     private Command getCommand(Path path) {
@@ -83,11 +87,14 @@ public class AutonomousManager {
             case TAXI:
                 return new DriveForward(TAXI_DRIVE_DISTANCE, m_drivetrain);
             case ONE_BALL:
-                return new SequentialCommandGroup(m_turnAndShoot, new TurnAngle(180, m_drivetrain), getCommand(Path.TAXI)); // fix
-            case TWO_BALL:
+                return new SequentialCommandGroup(m_turnAndShoot);
+            case ONE_BALL_TAXI:
+                return new SequentialCommandGroup(getCommand(Path.ONE_BALL), m_turnBack, getCommand(Path.TAXI));
+            case TWO_BALL_TAXI:
                 return new SequentialCommandGroup(getCommand(Path.ONE_BALL),
                     new TurnAngle(() -> getAngleToBall(), m_drivetrain),
-                    new DriveForward(() -> getDistanceToBall(), m_drivetrain), m_turnAndShoot);
+                    new DriveForward(() -> getDistanceToBall(), m_drivetrain),
+                    m_turnAndShoot);
             default:
                 return new InstantCommand();
         }
@@ -108,5 +115,9 @@ public class AutonomousManager {
 
     public void setInitPose(InitialPose pose) {
         setInitPose(pose.pose);
+    }
+
+    public void resetOdometry() {
+        m_drivetrain.setOdometry(m_initPose, m_drivetrain.gyroRotation());
     }
 }

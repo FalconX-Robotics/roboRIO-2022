@@ -160,6 +160,7 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 		m_autonomousManager.setPath(m_pathChooser.getSelected());
 		m_autonomousManager.setInitPose(m_initPoseChooser.getSelected());
+		m_autonomousManager.resetOdometry();
 		return m_autonomousManager.getCommand();
 	}
 }
