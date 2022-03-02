@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -44,5 +46,13 @@ public final class Constants {
 
     // led controller port
     public final static int LED_CONTROLLER_PORT = 9;
+
+    public static final double DRIVETRAIN_S = 0;
+
+    public static final double DRIVETRAIN_V = 0;
+
+    public static final double DRIVETRAIN_A = 0;
+
+    public static final DifferentialDriveKinematics DRIVE_KINEMATICS = null;
 
 }

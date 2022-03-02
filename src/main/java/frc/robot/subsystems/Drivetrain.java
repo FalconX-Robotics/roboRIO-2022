@@ -9,6 +9,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -22,9 +26,8 @@ public class Drivetrain extends SubsystemBase {
 
 	// Gyro
 	private WPI_PigeonIMU pigeon = new WPI_PigeonIMU(Constants.PIGEON_PORT);
-	private final NetworkTableEntry m_drivetrainGyroRawEntry = SmartDashboard.getEntry("Drivetrain/Gyro Raw");
-	private final NetworkTableEntry m_drivetrainGyroEntry = SmartDashboard.getEntry("Drivetrain/Gyro Raw");
-	private final NetworkTableEntry m_cameraGyroRawEntry = SmartDashboard.getEntry("Camera/Gyro Raw");
+	private final NetworkTableEntry m_drivetrainGyroEntry = SmartDashboard.getEntry("Drivetrain/Gyro");
+	private final NetworkTableEntry m_turnAngleGyroEntry = SmartDashboard.getEntry("TurnAngle/Gyro");
 	private final NetworkTableEntry m_cameraGyroEntry = SmartDashboard.getEntry("Camera/Gyro");
 	
 	// Define motor
@@ -42,6 +45,7 @@ public class Drivetrain extends SubsystemBase {
 
 	// defines m_drivetrain
 	private final DifferentialDrive m_drivetrain = new DifferentialDrive(m_leftSide, m_rightSide);
+	private final DifferentialDriveOdometry m_odometry;
 
 	private final NetworkTableEntry m_leftSideOutputEntry = SmartDashboard.getEntry("Drivetrain/Left Side Output");
 	private final NetworkTableEntry m_rightSideOutputEntry = SmartDashboard.getEntry("Drivetrain/Right Side Output");
@@ -57,12 +61,19 @@ public class Drivetrain extends SubsystemBase {
 
 		m_rightSide.setInverted(true);
 
-		SmartDashboard.putData("Drivetrain/Mod Chooser", m_modChooser);
+		SmartDashboard.putData("Drivetrain/Mod", m_modChooser);
+		m_odometry = new DifferentialDriveOdometry(getRotation(), new Pose2d(0, 0, new Rotation2d()));
 	}
 
 	// Creates tankDrive
 	public void tankDrive(double leftSpeed, double rightSpeed) {
 		m_drivetrain.tankDrive(leftSpeed, rightSpeed);
+	}
+
+	public void tankDriveVolts(double leftVolt, double rightVolt) {
+		m_leftSide.setVoltage(leftVolt);
+		m_rightSide.setVoltage(rightVolt);
+		m_drivetrain.feed();
 	}
 
 	// Creates arcadeDrive
@@ -87,6 +98,10 @@ public class Drivetrain extends SubsystemBase {
 		return MathUtil.clamp(-input, -m_maxWheelSpeed, m_maxWheelSpeed);
 	}
 
+	public Pose2d getPose() {
+		return m_odometry.getPoseMeters();
+	}
+
 	public double gyroYawRaw() {
 		double[] ypr_deg = new double[3];
 		pigeon.getYawPitchRoll(ypr_deg);
@@ -103,24 +118,41 @@ public class Drivetrain extends SubsystemBase {
 		return yaw <= 180 ? yaw : -360 + yaw;
 	}
 
+	public Rotation2d getRotation() {
+		return Rotation2d.fromDegrees(gyroYaw());
+	}
+
 	public void resetGyroYaw() {
 		pigeon.setYaw(0);
 	}
 
+	public double leftEncoderDistance() { // in meters 
+		return 0; // implement
+	}
+
+	public double rightEncoderDistance() { // in meters
+		return 0; // implement
+	}
+
+	public double averageEncoderDistance() {
+		return 0; // implement
+	}
+	
+	public void resetEncoder() {
+		// implement
+	}
+
+	public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+		return new DifferentialDriveWheelSpeeds(leftEncoderDistance(), rightEncoderDistance());
+	} 
+
 	@Override
 	public void periodic() {
-		// This method will be called once per scheduler run
-		m_drivetrainGyroRawEntry.setDouble(gyroYaw());
 		m_drivetrainGyroEntry.setDouble(gyroYaw());
-		m_cameraGyroRawEntry.setDouble(gyroYaw());
 		m_cameraGyroEntry.setDouble(gyroYaw());
+		m_turnAngleGyroEntry.setDouble(gyroYaw());
 
 		m_leftSideOutputEntry.setDouble(m_leftSide.get());
 		m_rightSideOutputEntry.setDouble(m_rightSide.get());
-	}
-
-	@Override
-	public void simulationPeriodic() {
-		// This method will be called once per scheduler run during simulation
 	}
 }

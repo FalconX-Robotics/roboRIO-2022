@@ -7,11 +7,14 @@ package frc.robot;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoShoot;
+import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LowerArm;
 import frc.robot.commands.OuttakeCommand;
@@ -45,26 +48,53 @@ public class RobotContainer {
 	private final Outtake m_outtake = new Outtake();
 	private final Intake m_intake = new Intake();
 	private final Connection m_connection = new Connection();
+
+	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_outtake, m_camera);
+	private final SendableChooser<AutonomousManager.Path> m_pathChooser = new SendableChooser<AutonomousManager.Path>();
+	private final SendableChooser<AutonomousManager.InitialPose> m_initPoseChooser = new SendableChooser<AutonomousManager.InitialPose>();
+
 	
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
 	@SuppressWarnings("unused")
 	private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, m_driver);
 
-	private final NetworkTableEntry m_autoTurnPField = SmartDashboard.getEntry("Drivetrain/P Field");
-	private final NetworkTableEntry m_autoTurnIField = SmartDashboard.getEntry("Drivetrain/I Field");
-	private final NetworkTableEntry m_autoTurnDField = SmartDashboard.getEntry("Drivetrain/D Field");
-	private final NetworkTableEntry m_autoTurnFField = SmartDashboard.getEntry("Drivetrain/F Field");
-	private final NetworkTableEntry m_autoTurnSetpointField = SmartDashboard.getEntry("Drivetrain/Setpoint Field");
+	private final NetworkTableEntry m_autoTurnPField = SmartDashboard.getEntry("AutoTurn/P Field");
+	private final NetworkTableEntry m_autoTurnIField = SmartDashboard.getEntry("AutoTurn/I Field");
+	private final NetworkTableEntry m_autoTurnDField = SmartDashboard.getEntry("AutoTurn/D Field");
+	private final NetworkTableEntry m_autoTurnFField = SmartDashboard.getEntry("AutoTurn/F Field");
+	private final NetworkTableEntry m_autoTurnSetpointField = SmartDashboard.getEntry("AutoTurn/Setpoint Field");
+
+	private final NetworkTableEntry m_driveForwardPField = SmartDashboard.getEntry("AutoTurn/P Field");
+	private final NetworkTableEntry m_driveForwardIField = SmartDashboard.getEntry("AutoTurn/I Field");
+	private final NetworkTableEntry m_driveForwardDField = SmartDashboard.getEntry("AutoTurn/D Field");
+	private final NetworkTableEntry m_driveForwardFField = SmartDashboard.getEntry("AutoTurn/F Field");
+	private final NetworkTableEntry m_driveForwardSetpointField = SmartDashboard.getEntry("AutoTurn/Setpoint Field");
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer() {
+		m_drivetrain.setDefaultCommand(m_arcadeDrive);
+
+		// auto manager
+		for (AutonomousManager.Path path : AutonomousManager.Path.values()) {
+			m_pathChooser.addOption(path.name(), path);
+		}
+		for (AutonomousManager.InitialPose pose : AutonomousManager.InitialPose.values()) {
+			m_initPoseChooser.addOption(pose.name(), pose);
+		}
+
+		m_pathChooser.setDefaultOption(m_autonomousManager.DEFAULT_PATH.name(), m_autonomousManager.DEFAULT_PATH);
+		m_initPoseChooser.setDefaultOption(m_autonomousManager.DEFAULT_INIT_POSE.name(), m_autonomousManager.DEFAULT_INIT_POSE);
+
+		SmartDashboard.putData("Auto/Field", new Field2d());
+		SmartDashboard.putData("Auto/Path", m_pathChooser);
+		SmartDashboard.putData("Auto/Initial Pose", m_initPoseChooser);
+
+		// turn angle
 		m_autoTurnPField.setDouble(0);
 		m_autoTurnIField.setDouble(0);
 		m_autoTurnDField.setDouble(0);
 		m_autoTurnFField.setDouble(0);
 		m_autoTurnSetpointField.setDouble(90);
-		m_drivetrain.setDefaultCommand(m_arcadeDrive);
-
 		SmartDashboard.putData("Drivetrain/TurnAngle", new TurnAngle(90, m_drivetrain) {
 			@Override
 			public void initialize() {
@@ -73,6 +103,21 @@ public class RobotContainer {
 				super.initialize();
 			}
 		}.withName("TurnAngle Modified"));
+
+		// drive forward
+		m_driveForwardPField.setDouble(0);
+		m_driveForwardIField.setDouble(0);
+		m_driveForwardDField.setDouble(0);
+		m_driveForwardPField.setDouble(0);
+		m_driveForwardSetpointField.setDouble(5);
+		SmartDashboard.putData("Drivetrain/DriveFoward", new DriveForward(5, m_drivetrain) {
+			@Override
+			public void initialize() {
+				setPIDF(m_driveForwardPField.getDouble(0), m_driveForwardIField.getDouble(0), m_driveForwardDField.getDouble(0), m_driveForwardFField.getDouble(0));
+				setSetpoint(m_driveForwardSetpointField.getDouble(0));
+				super.initialize();
+			}
+		});
 
 		SmartDashboard.putData("Drivetrain/AutoShoot", new AutoShoot(m_outtake, m_camera));
 		SmartDashboard.putData("Drivetrain/TurnToTarget", new TurnToTarget(m_drivetrain, m_camera));
@@ -113,7 +158,8 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		// An ExampleCommand will run in autonomous
-		return null;
+		m_autonomousManager.setPath(m_pathChooser.getSelected());
+		m_autonomousManager.setInitPose(m_initPoseChooser.getSelected());
+		return m_autonomousManager.getCommand();
 	}
 }

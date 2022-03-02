@@ -2,9 +2,22 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Camera": "Subsystem",
+      "/LiveWindow/Connection": "Subsystem",
       "/LiveWindow/Drivetrain": "Subsystem",
+      "/LiveWindow/Intake": "Subsystem",
+      "/LiveWindow/Led": "Subsystem",
+      "/LiveWindow/Outtake": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
-      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/SmartDashboard/Auto/Field": "Field2d",
+      "/SmartDashboard/Drivetrain/AutoShoot": "Command",
+      "/SmartDashboard/Drivetrain/Led Chooser": "String Chooser",
+      "/SmartDashboard/Drivetrain/Mod Chooser": "String Chooser",
+      "/SmartDashboard/Drivetrain/TurnAngle": "Command",
+      "/SmartDashboard/Drivetrain/TurnToTarget": "Command"
     }
   }
 }

@@ -9,33 +9,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.subsystems.Drivetrain;
 
-public class TurnAngle extends PIDCommand {
+public class DriveForward extends PIDCommand {
     private Drivetrain m_drivetrain;
-    protected double m_P = 0.7, m_I = 0, m_D = 0.03, m_F = 0.192;
-    protected double m_positionTolerance = 2, m_velocityTolerance = 40;
+    protected double m_P = 0, m_I = 0, m_D = 0, m_F = 0;
+    protected double m_positionTolerance = 0, m_velocityTolerance = 0;
     protected double m_maxSpeed = 1;
-    
+
     protected DoubleSupplier m_setpointSupplier;
-	protected NetworkTableEntry m_errorField = SmartDashboard.getEntry("TurnAngle/Error");
-    protected NetworkTableEntry m_velocityField = SmartDashboard.getEntry("TurnAngle/Velocity");
+	protected NetworkTableEntry m_errorField = SmartDashboard.getEntry("DriveForward/Error");
+    protected NetworkTableEntry m_velocityField = SmartDashboard.getEntry("DriveForward/Velocity");
     
     /**
-     * @param setpointSupplier is only called on initialize
+     * @param setpointSource is only called on initialize
      */
-    public TurnAngle(DoubleSupplier setpointSupplier, Drivetrain drivetrain) {
+    public DriveForward(DoubleSupplier setpointSource, Drivetrain drivetrain) {
         super(new PIDController(0, 0, 0),
-            drivetrain::gyroYaw,
+            drivetrain::averageEncoderDistance,
             0.,
             output -> {},
             drivetrain);
         m_drivetrain = drivetrain;
-        m_setpointSupplier = setpointSupplier;
         m_controller.setPID(m_P, m_I, m_D);
-        m_controller.enableContinuousInput(-180, 180);
         m_controller.setTolerance(m_positionTolerance, m_velocityTolerance);
     }
 
-    public TurnAngle(double setpointSource, Drivetrain drivetrain) {
+    public DriveForward(double setpointSource, Drivetrain drivetrain) {
         this(() -> setpointSource, drivetrain);
     }
 
@@ -54,9 +52,9 @@ public class TurnAngle extends PIDCommand {
     @Override
     public void initialize() {
         double setpoint = m_setpointSupplier.getAsDouble();
-        m_useOutput = output -> m_drivetrain.arcadeDrive(0, -m_F*Math.signum(output) - MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed));
+        m_useOutput = output -> m_drivetrain.arcadeDrive(m_F*Math.signum(output) + MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed), 0);
         m_setpoint = () -> setpoint;
-        m_drivetrain.resetGyroYaw();
+        m_drivetrain.resetEncoder();
     }
 
     @Override
@@ -73,6 +71,6 @@ public class TurnAngle extends PIDCommand {
 
     @Override
     public void end(boolean interrupted) {
-        m_errorField.setDouble(360);
+        m_errorField.setDouble(100);
     }
 }
