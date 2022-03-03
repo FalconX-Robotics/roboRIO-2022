@@ -10,12 +10,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.AutoShoot;
+import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.RunConveyor;
 import frc.robot.commands.TurnAngle;
-import frc.robot.commands.TurnToTarget;
 import frc.robot.subsystems.Ball;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
@@ -78,9 +76,10 @@ public class AutonomousManager {
         m_outtake = outtake;
         m_camera = camera;
 
-        m_turnAndShoot = new SequentialCommandGroup(
-            new TurnToTarget(m_drivetrain, m_camera),
-            new ParallelDeadlineGroup(new AutoShoot(m_outtake, m_camera), new RunConveyor(m_connection)));
+        // m_turnAndShoot = new SequentialCommandGroup(
+        //     new TurnToTarget(m_drivetrain, m_camera),
+        //     new ParallelDeadlineGroup(new AutoShoot(m_outtake, m_camera), new RunConveyor(m_connection)));
+        m_turnAndShoot = new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera);
         m_turnBack = new TurnAngle(() -> -m_drivetrain.gyroRotation().getDegrees(), m_drivetrain);
         m_faceInward = new TurnAngle(() -> getAngleToCenter(), m_drivetrain);
         m_faceOutward = new TurnAngle(() -> 180 - getAngleToCenter(), m_drivetrain);
