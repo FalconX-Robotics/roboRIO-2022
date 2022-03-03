@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,7 @@ import frc.robot.commands.RunConveyor;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
 import frc.robot.commands.TurnToTarget;
+import frc.robot.subsystems.Ball;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
@@ -52,6 +54,9 @@ public class RobotContainer {
 	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_outtake, m_camera);
 	private final SendableChooser<AutonomousManager.Path> m_pathChooser = new SendableChooser<AutonomousManager.Path>();
 	private final SendableChooser<AutonomousManager.InitialPose> m_initPoseChooser = new SendableChooser<AutonomousManager.InitialPose>();
+	private final Ball[] m_balls = {
+		new Ball(Alliance.Blue, m_autonomousManager.CENTER_FIELD)
+	};
 
 	
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
@@ -84,6 +89,7 @@ public class RobotContainer {
 
 		m_pathChooser.setDefaultOption(m_autonomousManager.DEFAULT_PATH.name(), m_autonomousManager.DEFAULT_PATH);
 		m_initPoseChooser.setDefaultOption(m_autonomousManager.DEFAULT_INIT_POSE.name(), m_autonomousManager.DEFAULT_INIT_POSE);
+		m_autonomousManager.addBalls(m_balls);
 
 		SmartDashboard.putData("Auto/Field", new Field2d());
 		SmartDashboard.putData("Auto/Path", m_pathChooser);
@@ -160,7 +166,7 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 		m_autonomousManager.setPath(m_pathChooser.getSelected());
 		m_autonomousManager.setInitPose(m_initPoseChooser.getSelected());
-		m_autonomousManager.resetOdometry();
+		m_autonomousManager.resetSensors();
 		return m_autonomousManager.getCommand();
 	}
 }
