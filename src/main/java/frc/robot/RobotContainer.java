@@ -5,10 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,8 +28,8 @@ import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Led;
-import frc.robot.subsystems.Outtake;
 import frc.robot.subsystems.Led.Pattern;
+import frc.robot.subsystems.Outtake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -48,10 +47,10 @@ public class RobotContainer {
 	private final Led m_led = new Led();
 	private final Drivetrain m_drivetrain = new Drivetrain();
 	private final Outtake m_outtake = new Outtake();
-	private final Intake m_intake = new Intake();
 	private final Connection m_connection = new Connection();
+	private final Intake m_intake = new Intake();
 
-	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_outtake, m_camera);
+	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_intake, m_connection, m_outtake, m_camera);
 	private final SendableChooser<AutonomousManager.Path> m_pathChooser = new SendableChooser<AutonomousManager.Path>();
 	private final SendableChooser<AutonomousManager.InitialPose> m_initPoseChooser = new SendableChooser<AutonomousManager.InitialPose>();
 	private final Ball[] m_balls = {
@@ -91,7 +90,7 @@ public class RobotContainer {
 		m_initPoseChooser.setDefaultOption(m_autonomousManager.DEFAULT_INIT_POSE.name(), m_autonomousManager.DEFAULT_INIT_POSE);
 		m_autonomousManager.addBalls(m_balls);
 
-		SmartDashboard.putData("Auto/Field", new Field2d());
+		SmartDashboard.putData("Auto/Field", m_drivetrain.m_field);
 		SmartDashboard.putData("Auto/Path", m_pathChooser);
 		SmartDashboard.putData("Auto/Initial Pose", m_initPoseChooser);
 

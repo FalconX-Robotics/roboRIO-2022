@@ -8,14 +8,19 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoShoot;
 import frc.robot.commands.DriveForward;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.RunConveyor;
 import frc.robot.commands.TurnAngle;
 import frc.robot.commands.TurnToTarget;
 import frc.robot.subsystems.Ball;
 import frc.robot.subsystems.Camera;
+import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Outtake;
 
 public class AutonomousManager {
@@ -46,8 +51,10 @@ public class AutonomousManager {
     public final InitialPose DEFAULT_INIT_POSE = InitialPose.INVALID;
     public final Path DEFAULT_PATH = Path.NONE;
 
-    private final SequentialCommandGroup m_turnAndShoot;
-    private final Command m_turnBack;
+    private final Command m_turnAndShoot;
+    @SuppressWarnings("unused") private final Command m_turnBack;
+    private final Command m_faceInward;
+    private final Command m_faceOutward;
 
     private final double TAXI_DRIVE_DISTANCE = 2.15;
     private final double SHOOT_DISTANCE_FROM_CENTER = 3.2;
@@ -56,31 +63,39 @@ public class AutonomousManager {
     private Pose2d m_initPose;
     private ArrayList<Ball> m_ballList;
     private Drivetrain m_drivetrain;
+    private Intake m_intake;
+    private Connection m_connection;
     private Outtake m_outtake;
     private Camera m_camera;
 
-    public AutonomousManager(Path path, Pose2d initPose, ArrayList<Ball> ballList, Drivetrain drivetrain, Outtake outtake, Camera camera) {
+    public AutonomousManager(Path path, Pose2d initPose, ArrayList<Ball> ballList, Drivetrain drivetrain, Intake intake, Connection connection, Outtake outtake, Camera camera) {
         m_path = path;
         m_initPose = initPose;
         m_ballList = ballList;
         m_drivetrain = drivetrain;
+        m_intake = intake;
+        m_connection = connection;
         m_outtake = outtake;
         m_camera = camera;
 
-        m_turnAndShoot = new SequentialCommandGroup(new TurnToTarget(m_drivetrain, m_camera), new AutoShoot(m_outtake, m_camera));
+        m_turnAndShoot = new SequentialCommandGroup(
+            new TurnToTarget(m_drivetrain, m_camera),
+            new ParallelDeadlineGroup(new AutoShoot(m_outtake, m_camera), new RunConveyor(m_connection)));
         m_turnBack = new TurnAngle(() -> -m_drivetrain.gyroRotation().getDegrees(), m_drivetrain);
+        m_faceInward = new TurnAngle(() -> getAngleToCenter(), m_drivetrain);
+        m_faceOutward = new TurnAngle(() -> 180 - getAngleToCenter(), m_drivetrain);
     }
 
-    public AutonomousManager(Path path, InitialPose initPose, ArrayList<Ball> ballList, Drivetrain drivetrain, Outtake outtake, Camera camera) {
-        this(path, initPose.pose, ballList, drivetrain, outtake, camera);
+    public AutonomousManager(Path path, InitialPose initPose, ArrayList<Ball> ballList, Drivetrain drivetrain, Intake intake, Connection connection, Outtake outtake, Camera camera) {
+        this(path, initPose.pose, ballList, drivetrain, intake, connection, outtake, camera);
     }
 
-    public AutonomousManager(Drivetrain drivetrain, Outtake outtake, Camera camera) {
-        this(Path.NONE, InitialPose.INVALID, new ArrayList<Ball>(), drivetrain, outtake, camera);
+    public AutonomousManager(Drivetrain drivetrain, Intake intake, Connection connection, Outtake outtake, Camera camera) {
+        this(Path.NONE, InitialPose.INVALID, new ArrayList<Ball>(), drivetrain, intake, connection, outtake, camera);
     }
 
     public Ball getClosestBall() {
-        return Ball.getClosestBallTo(m_ballList, DriverStation.getAlliance(), m_initPose.getTranslation()); // not sure if will work on comp
+        return Ball.getClosestBallTo(m_ballList, DriverStation.getAlliance(), m_initPose.getTranslation());
     }
 
     public double getAngleToBall() {
@@ -98,7 +113,7 @@ public class AutonomousManager {
         Pose2d pose = m_drivetrain.getPose();
         Translation2d v = pose.getTranslation().plus(CENTER_FIELD.unaryMinus());
         double a = Math.atan2(v.getY(), v.getX()) * (160 / Math.PI);
-        return 180 - a + pose.getRotation().getDegrees();
+        return a + 180 - pose.getRotation().getDegrees();
     }
 
     public double getDistanceFromCenter(double d) {
@@ -109,16 +124,17 @@ public class AutonomousManager {
     private Command getCommand(Path path) {
         switch (path) {
             case TAXI: // assumes to be facing outwards
-                return new DriveForward(TAXI_DRIVE_DISTANCE, m_drivetrain);
+                return new SequentialCommandGroup(m_faceOutward, new DriveForward(TAXI_DRIVE_DISTANCE, m_drivetrain));
             case ONE_BALL: // assumes to be facing towards center
-                return m_turnAndShoot;
+                return new SequentialCommandGroup(m_faceInward, m_turnAndShoot);
             case ONE_BALL_TAXI: // assumes to be facing towards center
-                return new SequentialCommandGroup(getCommand(Path.ONE_BALL), m_turnBack, getCommand(Path.TAXI));
+                return new SequentialCommandGroup(getCommand(Path.ONE_BALL), getCommand(Path.TAXI));
             case TWO_BALL_TAXI: // assumes to be facing same as ONE_BALL_TAXI
-                return new SequentialCommandGroup(getCommand(Path.ONE_BALL_TAXI),
+                return new SequentialCommandGroup(
+                    getCommand(Path.ONE_BALL_TAXI),
                     new TurnAngle(() -> getAngleToBall(), m_drivetrain),
-                    new DriveForward(() -> getDistanceToBall(), m_drivetrain),
-                    new TurnAngle(() -> getAngleToCenter(), m_drivetrain),
+                    new ParallelDeadlineGroup(new DriveForward(() -> getDistanceToBall() + 0.3, m_drivetrain), new IntakeCommand(m_intake)),
+                    m_faceInward,
                     new DriveForward(() -> getDistanceFromCenter(SHOOT_DISTANCE_FROM_CENTER), m_drivetrain),
                     m_turnAndShoot);
             default:

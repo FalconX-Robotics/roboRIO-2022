@@ -48,14 +48,14 @@ public class TurnAngle extends PIDCommand {
     }
 
     public void setSetpoint(double setpoint) {
-        this.m_setpoint = () -> setpoint;
+        this.m_setpoint = () -> m_drivetrain.truncateDegree(setpoint);
     }
 
     @Override
     public void initialize() {
         double setpoint = m_setpointSupplier.getAsDouble();
         m_useOutput = output -> m_drivetrain.arcadeDrive(0, -m_F*Math.signum(output) - MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed));
-        m_setpoint = () -> setpoint;
+        m_setpoint = () -> m_drivetrain.truncateDegree(setpoint);
         
         double initGyro = m_drivetrain.gyroYawRaw();
         m_measurement = () -> {

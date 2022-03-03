@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,6 +47,7 @@ public class Drivetrain extends SubsystemBase {
 	// defines m_drivetrain
 	private final DifferentialDrive m_drivetrain = new DifferentialDrive(m_leftSide, m_rightSide);
 	private final DifferentialDriveOdometry m_odometry;
+	public final Field2d m_field = new Field2d();
 
 	private final NetworkTableEntry m_leftSideOutputEntry = SmartDashboard.getEntry("Drivetrain/Left Side Output");
 	private final NetworkTableEntry m_rightSideOutputEntry = SmartDashboard.getEntry("Drivetrain/Right Side Output");
@@ -122,6 +124,12 @@ public class Drivetrain extends SubsystemBase {
 		return yaw <= 180 ? yaw : -360 + yaw;
 	}
 
+	public double truncateDegree(double degree) {
+		degree %= 360;
+		if (degree < 0) degree += 360;
+		return degree <= 180 ? degree : -360 + degree;
+	}
+
 	public Rotation2d gyroRotation() {
 		return Rotation2d.fromDegrees(gyroYaw());
 	}
@@ -153,6 +161,7 @@ public class Drivetrain extends SubsystemBase {
 	@Override
 	public void periodic() {
 		m_odometry.update(gyroRotation(), leftEncoderDistance(), rightEncoderDistance());
+		m_field.setRobotPose(getPose());
 		
 		m_drivetrainGyroEntry.setDouble(gyroYaw());
 		m_cameraGyroEntry.setDouble(gyroYaw());
