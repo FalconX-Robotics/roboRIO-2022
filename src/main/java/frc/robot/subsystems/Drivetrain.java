@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -57,11 +58,21 @@ public class Drivetrain extends SubsystemBase {
 	private final SendableChooser<DriveMod.Mod> m_modChooser = new SendableChooser<DriveMod.Mod>();
 	private final DriveMod m_driveMod = new DriveMod(m_modChooser);
 
+	// Encoder stuff
+	private final double WHEEL_CIRCUMFERENCE = 1. * Math.PI; // random value
+	private final double kEncoderConversionRatio = 1.; // random value
+	
+	private final RelativeEncoder m_leftEncoder = m_leftFrontMotor.getEncoder();
+	private final RelativeEncoder m_rightEncoder = m_rightFrontMotor.getEncoder();
+
 	/** Creates a new Drivetrain */
 	public Drivetrain() {
 		m_drivetrain.setSafetyEnabled(true);
 
 		m_rightSide.setInverted(true);
+
+		m_leftEncoder.setPositionConversionFactor(kEncoderConversionRatio);
+		m_rightEncoder.setPositionConversionFactor(kEncoderConversionRatio);
 
 		SmartDashboard.putData("Drivetrain/Mod", m_modChooser);
 		m_odometry = new DifferentialDriveOdometry(gyroRotation(), new Pose2d(0, 0, new Rotation2d()));
@@ -139,19 +150,20 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public double leftEncoderDistance() { // in meters 
-		return 0; // implement
+		return m_leftEncoder.getPosition(); 
 	}
 
 	public double rightEncoderDistance() { // in meters
-		return 0; // implement
+		return m_rightEncoder.getPosition(); 
 	}
 
 	public double averageEncoderDistance() {
-		return 0; // implement
+		return (leftEncoderDistance() + rightEncoderDistance() / 2); // implement
 	}
 	
 	public void resetEncoder() {
-		// implement
+		m_leftEncoder.setPosition(0.);
+		m_rightEncoder.setPosition(0.);
 	}
 
 	public DifferentialDriveWheelSpeeds getWheelSpeeds() {
