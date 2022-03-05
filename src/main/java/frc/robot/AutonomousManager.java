@@ -6,15 +6,17 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.TurnAngle;
-import frc.robot.subsystems.Ball;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
@@ -53,6 +55,7 @@ public class AutonomousManager {
     @SuppressWarnings("unused") private final Command m_turnBack;
     private final Command m_faceInward;
     private final Command m_faceOutward;
+    @SuppressWarnings("unused") private final Command m_pause;
 
     private final double TAXI_DRIVE_DISTANCE = 2.15;
     private final double SHOOT_DISTANCE_FROM_CENTER = 3.2;
@@ -65,8 +68,9 @@ public class AutonomousManager {
     private Connection m_connection;
     private Outtake m_outtake;
     private Camera m_camera;
+    private XboxController m_controller;
 
-    public AutonomousManager(Path path, Pose2d initPose, ArrayList<Ball> ballList, Drivetrain drivetrain, Intake intake, Connection connection, Outtake outtake, Camera camera) {
+    public AutonomousManager(Path path, Pose2d initPose, ArrayList<Ball> ballList, Drivetrain drivetrain, Intake intake, Connection connection, Outtake outtake, Camera camera, XboxController controller) {
         m_path = path;
         m_initPose = initPose;
         m_ballList = ballList;
@@ -75,32 +79,32 @@ public class AutonomousManager {
         m_connection = connection;
         m_outtake = outtake;
         m_camera = camera;
+        m_controller = controller;
 
-        // m_turnAndShoot = new SequentialCommandGroup(
-        //     new TurnToTarget(m_drivetrain, m_camera),
-        //     new ParallelDeadlineGroup(new AutoShoot(m_outtake, m_camera), new RunConveyor(m_connection)));
         m_turnAndShoot = new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera);
-        m_turnBack = new TurnAngle(() -> -m_drivetrain.gyroRotation().getDegrees(), m_drivetrain);
-        m_faceInward = new TurnAngle(() -> getAngleToCenter(), m_drivetrain);
-        m_faceOutward = new TurnAngle(() -> 180 - getAngleToCenter(), m_drivetrain);
+        m_turnBack = new TurnAngle(() -> -m_drivetrain.getRotation().getDegrees(), m_drivetrain);
+        m_faceInward = TurnAngle.toRotation(() -> getAngleToCenter(), m_drivetrain);
+        m_faceOutward = TurnAngle.toRotation(() -> 180 - getAngleToCenter(), m_drivetrain);
+        m_pause = new WaitUntilCommand(() -> m_controller.getStartButton());
     }
 
-    public AutonomousManager(Path path, InitialPose initPose, ArrayList<Ball> ballList, Drivetrain drivetrain, Intake intake, Connection connection, Outtake outtake, Camera camera) {
-        this(path, initPose.pose, ballList, drivetrain, intake, connection, outtake, camera);
+    public AutonomousManager(Path path, InitialPose initPose, ArrayList<Ball> ballList, Drivetrain drivetrain, Intake intake, Connection connection, Outtake outtake, Camera camera, XboxController controller) {
+        this(path, initPose.pose, ballList, drivetrain, intake, connection, outtake, camera, controller);
     }
 
-    public AutonomousManager(Drivetrain drivetrain, Intake intake, Connection connection, Outtake outtake, Camera camera) {
-        this(Path.NONE, InitialPose.INVALID, new ArrayList<Ball>(), drivetrain, intake, connection, outtake, camera);
+    public AutonomousManager(Drivetrain drivetrain, Intake intake, Connection connection, Outtake outtake, Camera camera, XboxController controller) {
+        this(Path.NONE, InitialPose.INVALID, new ArrayList<Ball>(), drivetrain, intake, connection, outtake, camera, controller);
     }
 
     public Ball getClosestBall() {
-        return Ball.getClosestBallTo(m_ballList, DriverStation.getAlliance(), m_initPose.getTranslation());
+        Alliance alliance = DriverStation.getAlliance(); // works in comp?
+        return Ball.getClosestBallTo(m_ballList, alliance, alliance == Alliance.Blue, m_initPose.getTranslation());
     }
 
     public double getAngleToBall() {
         Ball ball = getClosestBall();
         Translation2d v = ball.m_position.plus(m_drivetrain.getPose().getTranslation().unaryMinus());
-        return Math.atan2(v.getY(), v.getX())*(160./Math.PI) - m_drivetrain.getPose().getRotation().getDegrees();
+        return Math.atan2(v.getY(), v.getX())*(160./Math.PI);
     }
 
     public double getDistanceToBall() {
@@ -112,7 +116,7 @@ public class AutonomousManager {
         Pose2d pose = m_drivetrain.getPose();
         Translation2d v = pose.getTranslation().plus(CENTER_FIELD.unaryMinus());
         double a = Math.atan2(v.getY(), v.getX()) * (160 / Math.PI);
-        return a + 180 - pose.getRotation().getDegrees();
+        return a + 180; // + 180 to face inward instead of outward
     }
 
     public double getDistanceFromCenter(double d) {
@@ -131,7 +135,7 @@ public class AutonomousManager {
             case TWO_BALL_TAXI: // assumes to be facing same as ONE_BALL_TAXI
                 return new SequentialCommandGroup(
                     getCommand(Path.ONE_BALL_TAXI),
-                    new TurnAngle(() -> getAngleToBall(), m_drivetrain),
+                    TurnAngle.toRotation(this::getAngleToBall, m_drivetrain),
                     new ParallelDeadlineGroup(new DriveForward(() -> getDistanceToBall() + 0.3, m_drivetrain), new IntakeCommand(m_intake)),
                     m_faceInward,
                     new DriveForward(() -> getDistanceFromCenter(SHOOT_DISTANCE_FROM_CENTER), m_drivetrain),
@@ -167,6 +171,6 @@ public class AutonomousManager {
     public void resetSensors() {
         m_drivetrain.resetEncoder();
         m_drivetrain.resetGyroYaw();
-        m_drivetrain.setOdometry(m_initPose, m_drivetrain.gyroRotation());
+        m_drivetrain.setOdometry(m_initPose, m_drivetrain.getRotation());
     }
 }

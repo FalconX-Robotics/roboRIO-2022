@@ -23,7 +23,6 @@ import frc.robot.commands.RunConveyor;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
 import frc.robot.commands.TurnToTarget;
-import frc.robot.subsystems.Ball;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
@@ -51,11 +50,11 @@ public class RobotContainer {
 	private final Connection m_connection = new Connection();
 	private final Intake m_intake = new Intake();
 
-	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_intake, m_connection, m_outtake, m_camera);
+	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_intake, m_connection, m_outtake, m_camera, m_driver);
 	private final SendableChooser<AutonomousManager.Path> m_pathChooser = new SendableChooser<AutonomousManager.Path>();
 	private final SendableChooser<AutonomousManager.InitialPose> m_initPoseChooser = new SendableChooser<AutonomousManager.InitialPose>();
 	private final Ball[] m_balls = {
-		new Ball(Alliance.Blue, m_autonomousManager.CENTER_FIELD)
+		new Ball(Alliance.Blue, m_autonomousManager.CENTER_FIELD, true)
 	};
 
 	

@@ -35,8 +35,16 @@ public class TurnAngle extends PIDCommand {
         m_controller.setTolerance(m_positionTolerance, m_velocityTolerance);
     }
 
-    public TurnAngle(double setpointSource, Drivetrain drivetrain) {
-        this(() -> setpointSource, drivetrain);
+    public TurnAngle(double setpointSupplier, Drivetrain drivetrain) {
+        this(() -> setpointSupplier, drivetrain);
+    }
+
+    public static TurnAngle toRotation(DoubleSupplier setpointSupplier, Drivetrain drivetrain) {
+        return new TurnAngle(() -> setpointSupplier.getAsDouble() - drivetrain.getRotation().getDegrees(), drivetrain);
+    }
+
+    public static TurnAngle toRotation(double setpointSupplier, Drivetrain drivetrain) {
+        return toRotation(() -> setpointSupplier, drivetrain);
     }
 
     public void setPIDF(double P, double I, double D, double F) {

@@ -50,6 +50,8 @@ public class Drivetrain extends SubsystemBase {
 	private final DifferentialDriveOdometry m_odometry;
 	public final Field2d m_field = new Field2d();
 
+	private final NetworkTableEntry m_poseEntry = SmartDashboard.getEntry("Drivetrain/Pose");
+
 	private final NetworkTableEntry m_leftSideOutputEntry = SmartDashboard.getEntry("Drivetrain/Left Side Output");
 	private final NetworkTableEntry m_rightSideOutputEntry = SmartDashboard.getEntry("Drivetrain/Right Side Output");
 
@@ -75,7 +77,7 @@ public class Drivetrain extends SubsystemBase {
 		m_rightEncoder.setPositionConversionFactor(kEncoderConversionRatio);
 
 		SmartDashboard.putData("Drivetrain/Mod", m_modChooser);
-		m_odometry = new DifferentialDriveOdometry(gyroRotation(), new Pose2d(0, 0, new Rotation2d()));
+		m_odometry = new DifferentialDriveOdometry(getRotation(), new Pose2d(0, 0, new Rotation2d()));
 	}
 
 	// Creates tankDrive
@@ -141,7 +143,7 @@ public class Drivetrain extends SubsystemBase {
 		return degree <= 180 ? degree : -360 + degree;
 	}
 
-	public Rotation2d gyroRotation() {
+	public Rotation2d getRotation() {
 		return Rotation2d.fromDegrees(gyroYaw());
 	}
 
@@ -172,8 +174,10 @@ public class Drivetrain extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		m_odometry.update(gyroRotation(), leftEncoderDistance(), rightEncoderDistance());
+		m_odometry.update(getRotation(), leftEncoderDistance(), rightEncoderDistance());
+		m_poseEntry.setString("[" + getPose().getX() + ", " + getPose().getY() + ", " + getPose().getRotation().getDegrees() + "]");
 		m_field.setRobotPose(getPose());
+		
 		
 		m_drivetrainGyroEntry.setDouble(gyroYaw());
 		m_cameraGyroEntry.setDouble(gyroYaw());
