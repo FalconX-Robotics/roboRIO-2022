@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -54,7 +56,7 @@ public class RobotContainer {
 	private final SendableChooser<AutonomousManager.Path> m_pathChooser = new SendableChooser<AutonomousManager.Path>();
 	private final SendableChooser<AutonomousManager.InitialPose> m_initPoseChooser = new SendableChooser<AutonomousManager.InitialPose>();
 	private final Ball[] m_balls = {
-		new Ball(Alliance.Blue, m_autonomousManager.CENTER_FIELD, true)
+		new Ball(Alliance.Blue, new Translation2d(1, 1), true)
 	};
 
 	

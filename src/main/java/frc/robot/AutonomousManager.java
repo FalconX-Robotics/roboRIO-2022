@@ -44,8 +44,8 @@ public class AutonomousManager {
     }
 
     // field data
-    private final double FIELD_WIDTH = 8.23;
-    private final double FIELD_LENGTH = 16.46;
+    private final double FIELD_WIDTH = 8.23 * 2;
+    private final double FIELD_LENGTH = 16.46 * 2;
     public final Translation2d CENTER_FIELD = new Translation2d(FIELD_WIDTH/2, FIELD_LENGTH/2);
 
     public final InitialPose DEFAULT_INIT_POSE = InitialPose.INVALID;

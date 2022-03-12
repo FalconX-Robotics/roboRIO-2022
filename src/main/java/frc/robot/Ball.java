@@ -10,6 +10,13 @@ public class Ball {
     public final Translation2d m_position;
     public final boolean m_blueSide;
 
+    /**
+   * Represents a ball on the field
+   *
+   * @param alliance The alliance the ball belongs to
+   * @param translation The (x, y) coordinates of the ball. (0, 0) is the bottom left corner of the field
+   * @param blueSide If the ball is on the side of the blue alliance. True is left side of slant, false is right side of slant
+   */
     public Ball(Alliance alliance, Translation2d translation, boolean blueSide) {
         m_alliance = alliance;
         m_position = translation;
