@@ -61,8 +61,8 @@ public class Drivetrain extends SubsystemBase {
 	private final DriveMod m_driveMod = new DriveMod(m_modChooser);
 
 	// Encoder stuff
-	private final double WHEEL_CIRCUMFERENCE = 1. * Math.PI; // random value
-	private final double kEncoderConversionRatio = 1.; // random value
+	private final double WHEEL_CIRCUMFERENCE = 6. * Math.PI; 
+	private final double kEncoderConversionRatio = (WHEEL_CIRCUMFERENCE * (12. / 50.) * (24. / 50.)) / 39.37; // in meters
 	
 	private final RelativeEncoder m_leftEncoder = m_leftFrontMotor.getEncoder();
 	private final RelativeEncoder m_rightEncoder = m_rightFrontMotor.getEncoder();
