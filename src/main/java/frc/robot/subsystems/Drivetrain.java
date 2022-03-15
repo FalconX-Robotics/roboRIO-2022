@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -72,7 +73,10 @@ public class Drivetrain extends SubsystemBase {
 		m_drivetrain.setSafetyEnabled(true);
 
 		m_rightSide.setInverted(true);
-
+		m_rightBackMotor.setIdleMode(IdleMode.kBrake);
+		m_rightFrontMotor.setIdleMode(IdleMode.kBrake);
+		m_leftBackMotor.setIdleMode(IdleMode.kBrake);
+		m_leftFrontMotor.setIdleMode(IdleMode.kBrake);
 		m_leftEncoder.setPositionConversionFactor(kEncoderConversionRatio);
 		m_rightEncoder.setPositionConversionFactor(kEncoderConversionRatio);
 
