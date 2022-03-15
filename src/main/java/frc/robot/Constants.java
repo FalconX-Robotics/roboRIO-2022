@@ -23,26 +23,26 @@ public final class Constants {
     public final static int PIGEON_PORT = 42;
 
     // left ports
-    public final static int LEFT_FRONT_MOTOR_PORT = 1;
-    public final static int LEFT_BACK_MOTOR_PORT = 2;
+    public final static int LEFT_FRONT_MOTOR_PORT = 4;
+    public final static int LEFT_BACK_MOTOR_PORT = 1;
 
     // right ports
-    public final static int RIGHT_FRONT_MOTOR_PORT = 3;
-    public final static int RIGHT_BACK_MOTOR_PORT = 4;
+    public final static int RIGHT_FRONT_MOTOR_PORT = 7;
+    public final static int RIGHT_BACK_MOTOR_PORT = 2;
 
     // controller port
     public final static int CONTROLLER_PORT = 0;
 
     // INTAKE_PORT
-    public final static int INTAKE_PORT = 8; // random value; change later
+    public final static int INTAKE_PORT = 3; // random value; change later
     public final static int INTAKE_ARM_MOTOR = 5; //again, random value 
 
     // top and bottom ports
-    public final static int TOP_PORT = 7; // random value; change later
-    public final static int BOTTOM_PORT = 6; // random value; change later
+    public final static int TOP_PORT = 9; // random value; change later
+    public final static int BOTTOM_PORT = 8; // random value; change later
 
     // conveyor motor port
-    public final static int CONNECTION_PORT = 9;
+    public final static int CONNECTION_PORT = 6;
 
     // led controller port
     public final static int LED_CONTROLLER_PORT = 9;
