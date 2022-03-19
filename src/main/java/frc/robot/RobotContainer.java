@@ -70,11 +70,11 @@ public class RobotContainer {
 	private final NetworkTableEntry m_autoTurnFField = SmartDashboard.getEntry("AutoTurn/F Field");
 	private final NetworkTableEntry m_autoTurnSetpointField = SmartDashboard.getEntry("AutoTurn/Setpoint Field");
 
-	private final NetworkTableEntry m_driveForwardPField = SmartDashboard.getEntry("AutoTurn/P Field");
-	private final NetworkTableEntry m_driveForwardIField = SmartDashboard.getEntry("AutoTurn/I Field");
-	private final NetworkTableEntry m_driveForwardDField = SmartDashboard.getEntry("AutoTurn/D Field");
-	private final NetworkTableEntry m_driveForwardFField = SmartDashboard.getEntry("AutoTurn/F Field");
-	private final NetworkTableEntry m_driveForwardSetpointField = SmartDashboard.getEntry("AutoTurn/Setpoint Field");
+	private final NetworkTableEntry m_driveForwardPField = SmartDashboard.getEntry("DriveForward/P Field");
+	private final NetworkTableEntry m_driveForwardIField = SmartDashboard.getEntry("DriveForward/I Field");
+	private final NetworkTableEntry m_driveForwardDField = SmartDashboard.getEntry("DriveForward/D Field");
+	private final NetworkTableEntry m_driveForwardFField = SmartDashboard.getEntry("DriveForward/F Field");
+	private final NetworkTableEntry m_driveForwardSetpointField = SmartDashboard.getEntry("DriveForward/Setpoint Field");
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer() {

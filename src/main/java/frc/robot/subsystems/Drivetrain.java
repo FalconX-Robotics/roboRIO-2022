@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -33,6 +34,7 @@ public class Drivetrain extends SubsystemBase {
 	private final NetworkTableEntry m_turnAngleGyroEntry = SmartDashboard.getEntry("TurnAngle/Gyro");
 	private final NetworkTableEntry m_cameraGyroEntry = SmartDashboard.getEntry("Camera/Gyro");
 	
+	private final NetworkTableEntry m_EncoderEntry = SmartDashboard.getEntry("Drivetrain/Encoder");
 	// Define motor
 
 	// define left MotorControl group
@@ -79,9 +81,14 @@ public class Drivetrain extends SubsystemBase {
 		m_leftFrontMotor.setIdleMode(IdleMode.kBrake);
 		m_leftEncoder.setPositionConversionFactor(kEncoderConversionRatio);
 		m_rightEncoder.setPositionConversionFactor(kEncoderConversionRatio);
+		m_leftFrontMotor.setOpenLoopRampRate(0.3);
+        m_rightFrontMotor.setOpenLoopRampRate(0.3);
+        m_leftBackMotor.setOpenLoopRampRate(0.3);
+        m_rightBackMotor.setOpenLoopRampRate(0.3);
 
 		SmartDashboard.putData("Drivetrain/Mod", m_modChooser);
 		m_odometry = new DifferentialDriveOdometry(getRotation(), new Pose2d(0, 0, new Rotation2d()));
+		System.out.println("HEEEEEEEEEEEEEEEY " + pigeon.getState());
 	}
 
 	// Creates tankDrive
@@ -186,6 +193,8 @@ public class Drivetrain extends SubsystemBase {
 		m_drivetrainGyroEntry.setDouble(gyroYaw());
 		m_cameraGyroEntry.setDouble(gyroYaw());
 		m_turnAngleGyroEntry.setDouble(gyroYaw());
+
+		m_EncoderEntry.setDouble(averageEncoderDistance());
 
 		m_leftSideOutputEntry.setDouble(m_leftSide.get());
 		m_rightSideOutputEntry.setDouble(m_rightSide.get());

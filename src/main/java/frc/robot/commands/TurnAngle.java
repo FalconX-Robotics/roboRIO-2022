@@ -11,7 +11,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class TurnAngle extends PIDCommand {
     private Drivetrain m_drivetrain;
-    protected double m_P = 0.7, m_I = 0, m_D = 0.03, m_F = 0.192;
+    protected double m_P = 0.07, m_I = 0, m_D = 0.03, m_F = 0.192;
     protected double m_positionTolerance = 2, m_velocityTolerance = 40;
     protected double m_maxSpeed = 1;
     
