@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.ArcadeDrive;
@@ -143,20 +146,31 @@ public class RobotContainer {
 	 */
 
 	private void configureButtonBindings() {
-		new JoystickButton(m_driver, XboxController.Button.kA.value)
-				.toggleWhenPressed(new OuttakeCommand(m_outtake, 1));
-		new JoystickButton(m_driver, XboxController.Button.kB.value)
-				.toggleWhenPressed(new IntakeCommand(m_intake));
+		// new JoystickButton(m_driver, XboxController.Button.kA.value)
+		// 		.toggleWhenPressed(new OuttakeCommand(m_outtake, 1));
+		// new JoystickButton(m_driver, XboxController.Button.kB.value)
+		// 		.toggleWhenPressed(new IntakeCommand(m_intake));
+
+		// new JoystickButton(m_driver, XboxController.Button.kX.value)
+		// 	.whenPressed(new LowerArm(m_intake));
 
 		new JoystickButton(m_driver, XboxController.Button.kX.value)
-			.whenPressed(new LowerArm(m_intake));
+			.whenHeld(new OuttakeCommand(m_outtake, 1));
 			
-		new JoystickButton(m_driver, XboxController.Button.kY.value)
-			.toggleWhenPressed(new RunConveyor(m_connection));
+		new JoystickButton(m_driver, XboxController.Button.kA.value)
+			.whenHeld(new RunConveyor(m_connection));
 		
 		// bind AimAndShoot to the right bumper
 		new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
 			.whenPressed(new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera));
+
+		new JoystickButton(m_driver, XboxController.Button.kY.value)
+			.whenPressed(new ParallelDeadlineGroup(
+				new WaitCommand(2), 
+				new SequentialCommandGroup(
+					new OuttakeCommand(m_outtake, 1),
+					new WaitCommand(0.5),
+					new RunConveyor(m_connection))));
 	}
 
 	public void setLed(Pattern pattern) {
