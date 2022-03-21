@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -13,16 +12,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoShoot;
 import frc.robot.commands.DriveForward;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.LowerArm;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RunConveyor;
 import frc.robot.commands.TankDrive;
@@ -163,14 +159,13 @@ public class RobotContainer {
 		// bind AimAndShoot to the right bumper
 		new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
 			.whenPressed(new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera));
-
+		
 		new JoystickButton(m_driver, XboxController.Button.kY.value)
-			.whenPressed(new ParallelDeadlineGroup(
-				new WaitCommand(2), 
-				new SequentialCommandGroup(
+			.whenPressed(
+				new ParallelCommandGroup(
 					new OuttakeCommand(m_outtake, 1),
-					new WaitCommand(0.5),
-					new RunConveyor(m_connection))));
+					new WaitCommand(0.5).andThen(new RunConveyor(m_connection))
+				).withTimeout(2));
 	}
 
 	public void setLed(Pattern pattern) {

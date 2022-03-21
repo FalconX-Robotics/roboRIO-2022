@@ -4,12 +4,11 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -33,8 +32,8 @@ public class Drivetrain extends SubsystemBase {
 	private final NetworkTableEntry m_drivetrainGyroEntry = SmartDashboard.getEntry("Drivetrain/Gyro");
 	private final NetworkTableEntry m_turnAngleGyroEntry = SmartDashboard.getEntry("TurnAngle/Gyro");
 	private final NetworkTableEntry m_cameraGyroEntry = SmartDashboard.getEntry("Camera/Gyro");
-	
-	private final NetworkTableEntry m_EncoderEntry = SmartDashboard.getEntry("Drivetrain/Encoder");
+	private final NetworkTableEntry m_encoderEntry = SmartDashboard.getEntry("Drivetrain/Encoder");
+
 	// Define motor
 
 	// define left MotorControl group
@@ -88,7 +87,6 @@ public class Drivetrain extends SubsystemBase {
 
 		SmartDashboard.putData("Drivetrain/Mod", m_modChooser);
 		m_odometry = new DifferentialDriveOdometry(getRotation(), new Pose2d(0, 0, new Rotation2d()));
-		System.out.println("HEEEEEEEEEEEEEEEY " + pigeon.getState());
 	}
 
 	// Creates tankDrive
@@ -171,7 +169,7 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public double averageEncoderDistance() {
-		return (leftEncoderDistance() + rightEncoderDistance() / 2); // implement
+		return (leftEncoderDistance() + rightEncoderDistance()) / 2; // implement
 	}
 	
 	public void resetEncoder() {
@@ -194,7 +192,7 @@ public class Drivetrain extends SubsystemBase {
 		m_cameraGyroEntry.setDouble(gyroYaw());
 		m_turnAngleGyroEntry.setDouble(gyroYaw());
 
-		m_EncoderEntry.setDouble(averageEncoderDistance());
+		m_encoderEntry.setDouble(averageEncoderDistance());
 
 		m_leftSideOutputEntry.setDouble(m_leftSide.get());
 		m_rightSideOutputEntry.setDouble(m_rightSide.get());
