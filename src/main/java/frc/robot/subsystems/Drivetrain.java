@@ -47,10 +47,6 @@ public class Drivetrain extends SubsystemBase {
 
 	// defines m_drivetrain
 	private final DifferentialDrive m_drivetrain = new DifferentialDrive(m_leftSide, m_rightSide);
-	private final DifferentialDriveOdometry m_odometry;
-	public final Field2d m_field = new Field2d();
-
-	private final NetworkTableEntry m_poseEntry = SmartDashboard.getEntry("Drivetrain/Pose");
 
 	private final NetworkTableEntry m_leftSideOutputEntry = SmartDashboard.getEntry("Drivetrain/Left Side Output");
 	private final NetworkTableEntry m_rightSideOutputEntry = SmartDashboard.getEntry("Drivetrain/Right Side Output");
@@ -77,7 +73,6 @@ public class Drivetrain extends SubsystemBase {
 		m_rightEncoder.setPositionConversionFactor(kEncoderConversionRatio);
 
 		SmartDashboard.putData("Drivetrain/Mod", m_modChooser);
-		m_odometry = new DifferentialDriveOdometry(getRotation(), new Pose2d(0, 0, new Rotation2d()));
 	}
 
 	// Creates tankDrive
@@ -113,14 +108,6 @@ public class Drivetrain extends SubsystemBase {
 		return MathUtil.clamp(-input, -m_maxWheelSpeed, m_maxWheelSpeed);
 	}
 
-	public void setOdometry(Pose2d pose, Rotation2d gyro) {
-		m_odometry.resetPosition(pose, gyro);
-	}
-
-	public Pose2d getPose() {
-		return m_odometry.getPoseMeters();
-	}
-
 	public double gyroYawRaw() {
 		double[] ypr_deg = new double[3];
 		pigeon.getYawPitchRoll(ypr_deg);
@@ -143,10 +130,6 @@ public class Drivetrain extends SubsystemBase {
 		return degree <= 180 ? degree : -360 + degree;
 	}
 
-	public Rotation2d getRotation() {
-		return Rotation2d.fromDegrees(gyroYaw());
-	}
-
 	public void resetGyroYaw() {
 		pigeon.setYaw(0);
 	}
@@ -156,7 +139,7 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public double rightEncoderDistance() { // in meters
-		return m_rightEncoder.getPosition(); 
+		return -m_rightEncoder.getPosition(); 
 	}
 
 	public double averageEncoderDistance() {
@@ -168,17 +151,8 @@ public class Drivetrain extends SubsystemBase {
 		m_rightEncoder.setPosition(0.);
 	}
 
-	public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-		return new DifferentialDriveWheelSpeeds(leftEncoderDistance(), rightEncoderDistance());
-	}
-
 	@Override
 	public void periodic() {
-		m_odometry.update(getRotation(), leftEncoderDistance(), rightEncoderDistance());
-		m_poseEntry.setString("[" + getPose().getX() + ", " + getPose().getY() + ", " + getPose().getRotation().getDegrees() + "]");
-		m_field.setRobotPose(getPose());
-		
-		
 		m_drivetrainGyroEntry.setDouble(gyroYaw());
 		m_cameraGyroEntry.setDouble(gyroYaw());
 		m_turnAngleGyroEntry.setDouble(gyroYaw());

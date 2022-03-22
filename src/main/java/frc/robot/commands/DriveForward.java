@@ -25,7 +25,7 @@ public class DriveForward extends PIDCommand {
     public DriveForward(DoubleSupplier setpointSource, Drivetrain drivetrain) {
         super(new PIDController(0, 0, 0),
             () -> 0.,
-            0.,
+            setpointSource,
             output -> {},
             drivetrain);
         m_drivetrain = drivetrain;
@@ -46,13 +46,12 @@ public class DriveForward extends PIDCommand {
     }
 
     public void setSetpoint(double setpoint) {
-        this.m_setpoint = () -> setpoint;
+        m_setpoint = () -> setpoint;
     }
 
     @Override
     public void initialize() {
         double setpoint = m_setpointSupplier.getAsDouble();
-        m_setpoint = () -> setpoint;
         m_useOutput = output -> m_drivetrain.arcadeDrive(m_F*Math.signum(output) + MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed), 0);
 
         double m_initEncoderDistance = m_drivetrain.averageEncoderDistance();

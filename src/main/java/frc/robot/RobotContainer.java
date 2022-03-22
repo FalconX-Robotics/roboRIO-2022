@@ -5,19 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoShoot;
 import frc.robot.commands.DriveForward;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.LowerArm;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RunConveyor;
 import frc.robot.commands.TankDrive;
@@ -26,8 +22,6 @@ import frc.robot.commands.TurnToTarget;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Led.Pattern;
 import frc.robot.subsystems.Outtake;
 
@@ -44,20 +38,15 @@ public class RobotContainer {
 	// Defines controller and subsystems
 	private final XboxController m_driver = new XboxController(Constants.CONTROLLER_PORT);
 	private final Camera m_camera = new Camera();
-	private final Led m_led = new Led();
+	// private final Led m_led = new Led();
 	private final Drivetrain m_drivetrain = new Drivetrain();
 	private final Outtake m_outtake = new Outtake();
 	private final Connection m_connection = new Connection();
-	private final Intake m_intake = new Intake();
+	// private final Intake m_intake = new Intake();
 
-	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_intake, m_connection, m_outtake, m_camera, m_driver);
+	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_connection, m_outtake, m_driver);
 	private final SendableChooser<AutonomousManager.Path> m_pathChooser = new SendableChooser<AutonomousManager.Path>();
-	private final SendableChooser<AutonomousManager.InitialPose> m_initPoseChooser = new SendableChooser<AutonomousManager.InitialPose>();
-	private final Ball[] m_balls = {
-		new Ball(Alliance.Blue, m_autonomousManager.CENTER_FIELD, true)
-	};
 
-	
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
 	@SuppressWarnings("unused")
 	private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, m_driver);
@@ -82,17 +71,9 @@ public class RobotContainer {
 		for (AutonomousManager.Path path : AutonomousManager.Path.values()) {
 			m_pathChooser.addOption(path.name(), path);
 		}
-		for (AutonomousManager.InitialPose pose : AutonomousManager.InitialPose.values()) {
-			m_initPoseChooser.addOption(pose.name(), pose);
-		}
 
 		m_pathChooser.setDefaultOption(m_autonomousManager.DEFAULT_PATH.name(), m_autonomousManager.DEFAULT_PATH);
-		m_initPoseChooser.setDefaultOption(m_autonomousManager.DEFAULT_INIT_POSE.name(), m_autonomousManager.DEFAULT_INIT_POSE);
-		m_autonomousManager.addBalls(m_balls);
-
-		SmartDashboard.putData("Auto/Field", m_drivetrain.m_field);
 		SmartDashboard.putData("Auto/Path", m_pathChooser);
-		SmartDashboard.putData("Auto/Initial Pose", m_initPoseChooser);
 
 		// turn angle
 		m_autoTurnPField.setDouble(0);
@@ -143,22 +124,22 @@ public class RobotContainer {
 	private void configureButtonBindings() {
 		new JoystickButton(m_driver, XboxController.Button.kA.value)
 				.toggleWhenPressed(new OuttakeCommand(m_outtake, 1));
-		new JoystickButton(m_driver, XboxController.Button.kB.value)
-				.toggleWhenPressed(new IntakeCommand(m_intake));
+		// new JoystickButton(m_driver, XboxController.Button.kB.value)
+		// 		.toggleWhenPressed(new IntakeCommand(m_intake));
 
-		new JoystickButton(m_driver, XboxController.Button.kX.value)
-			.whenPressed(new LowerArm(m_intake));
+		// new JoystickButton(m_driver, XboxController.Button.kX.value)
+		// 	.whenPressed(new LowerArm(m_intake));
 			
 		new JoystickButton(m_driver, XboxController.Button.kY.value)
 			.toggleWhenPressed(new RunConveyor(m_connection));
 		
 		// bind AimAndShoot to the right bumper
-		new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
-			.whenPressed(new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera));
+		// new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
+		// 	.whenPressed(new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera));
 	}
 
 	public void setLed(Pattern pattern) {
-		m_led.setLed(pattern);
+		// m_led.setLed(pattern);
 	}
 
 	/**
@@ -168,8 +149,6 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		m_autonomousManager.setPath(m_pathChooser.getSelected());
-		m_autonomousManager.setInitPose(m_initPoseChooser.getSelected());
-		m_autonomousManager.resetSensors();
 		return m_autonomousManager.getCommand();
 	}
 }
