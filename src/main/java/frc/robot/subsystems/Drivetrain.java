@@ -25,8 +25,6 @@ public class Drivetrain extends SubsystemBase {
 	// Gyro
 	private WPI_PigeonIMU pigeon = new WPI_PigeonIMU(Constants.PIGEON_PORT);
 	private final NetworkTableEntry m_drivetrainGyroEntry = SmartDashboard.getEntry("Drivetrain/Gyro");
-	private final NetworkTableEntry m_turnAngleGyroEntry = SmartDashboard.getEntry("TurnAngle/Gyro");
-	private final NetworkTableEntry m_cameraGyroEntry = SmartDashboard.getEntry("Camera/Gyro");
 	private final NetworkTableEntry m_encoderEntry = SmartDashboard.getEntry("Drivetrain/Encoder");
 
 	// Define motor
@@ -158,9 +156,6 @@ public class Drivetrain extends SubsystemBase {
 	@Override
 	public void periodic() {
 		m_drivetrainGyroEntry.setDouble(gyroYaw());
-		m_cameraGyroEntry.setDouble(gyroYaw());
-		m_turnAngleGyroEntry.setDouble(gyroYaw());
-
 		m_encoderEntry.setDouble(averageEncoderDistance());
 
 		m_leftSideOutputEntry.setDouble(m_leftSide.get());

@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -16,13 +15,11 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.ArcadeDrive;
-import frc.robot.commands.AutoShoot;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RunConveyor;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
-import frc.robot.commands.TurnToTarget;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
@@ -48,7 +45,7 @@ public class RobotContainer {
 	private final Connection m_connection = new Connection();
 	// private final Intake m_intake = new Intake();
 
-	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_connection, m_outtake, m_driver);
+	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_connection, m_outtake, m_camera, m_driver);
 	private final SendableChooser<AutonomousManager.Path> m_pathChooser = new SendableChooser<AutonomousManager.Path>();
 
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
@@ -77,7 +74,7 @@ public class RobotContainer {
 		}
 
 		m_pathChooser.setDefaultOption(m_autonomousManager.DEFAULT_PATH.name(), m_autonomousManager.DEFAULT_PATH);
-		SmartDashboard.putData("Auto/Path", m_pathChooser);
+		SmartDashboard.putData("Main/Path", m_pathChooser);
 
 		// turn angle
 		m_autoTurnPField.setDouble(0);
@@ -85,7 +82,7 @@ public class RobotContainer {
 		m_autoTurnDField.setDouble(0);
 		m_autoTurnFField.setDouble(0);
 		m_autoTurnSetpointField.setDouble(90);
-		SmartDashboard.putData("Drivetrain/TurnAngle", new TurnAngle(90, m_drivetrain) {
+		SmartDashboard.putData("AutoTurn/TurnAngle", new TurnAngle(90, m_drivetrain) {
 			@Override
 			public void initialize() {
 				setPIDF(m_autoTurnPField.getDouble(0), m_autoTurnIField.getDouble(0), m_autoTurnDField.getDouble(0), m_autoTurnFField.getDouble(0));
@@ -100,17 +97,14 @@ public class RobotContainer {
 		m_driveForwardDField.setDouble(0);
 		m_driveForwardPField.setDouble(0);
 		m_driveForwardSetpointField.setDouble(5);
-		SmartDashboard.putData("Drivetrain/DriveFoward", new DriveForward(5, m_drivetrain) {
+		SmartDashboard.putData("DriveForward/DriveForward", new DriveForward(5, m_drivetrain) {
 			@Override
 			public void initialize() {
 				setPIDF(m_driveForwardPField.getDouble(0), m_driveForwardIField.getDouble(0), m_driveForwardDField.getDouble(0), m_driveForwardFField.getDouble(0));
 				setSetpoint(m_driveForwardSetpointField.getDouble(0));
 				super.initialize();
 			}
-		});
-
-		SmartDashboard.putData("Drivetrain/AutoShoot", new AutoShoot(m_outtake, m_camera));
-		SmartDashboard.putData("Drivetrain/TurnToTarget", new TurnToTarget(m_drivetrain, m_camera));
+		}.withName("DriveForward Modified"));
 
 		// Configure the button bindings
 		configureButtonBindings();

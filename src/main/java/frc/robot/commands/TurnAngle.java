@@ -4,8 +4,6 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.subsystems.Drivetrain;
 
@@ -15,8 +13,8 @@ public class TurnAngle extends PIDCommand {
     protected double m_positionTolerance = 0, m_velocityTolerance = 0;
     protected double m_maxSpeed = 1;
     
-	protected NetworkTableEntry m_errorField = SmartDashboard.getEntry("TurnAngle/Error");
-    protected NetworkTableEntry m_velocityField = SmartDashboard.getEntry("TurnAngle/Velocity");
+	// protected NetworkTableEntry m_errorField = SmartDashboard.getEntry("TurnAngle/Error");
+    // protected NetworkTableEntry m_velocityField = SmartDashboard.getEntry("TurnAngle/Velocity");
     
     /**
      * @param setpointSupplier is only called on initialize
@@ -61,8 +59,8 @@ public class TurnAngle extends PIDCommand {
     @Override
     public void execute() {
         super.execute();
-        m_errorField.setDouble(m_controller.getPositionError());
-        m_velocityField.setDouble(m_controller.getVelocityError());
+        // m_errorField.setDouble(m_controller.getPositionError());
+        // m_velocityField.setDouble(m_controller.getVelocityError());
     }
 
     @Override
@@ -72,6 +70,6 @@ public class TurnAngle extends PIDCommand {
 
     @Override
     public void end(boolean interrupted) {
-        m_errorField.setDouble(360);
+        // m_errorField.setDouble(360);
     }
 }

@@ -13,7 +13,6 @@ public class TurnToTarget extends TurnAngle {
 
     //Access Smart Dashboard(?)
     protected NetworkTableEntry m_setpointField = SmartDashboard.getEntry("Camera/Setpoint");
-    protected NetworkTableEntry m_processedField = SmartDashboard.getEntry("Camera/Processed");
     protected NetworkTableEntry m_errorField = SmartDashboard.getEntry("Camera/Error");
     
     public TurnToTarget(Drivetrain drivetrain, Camera camera) {
