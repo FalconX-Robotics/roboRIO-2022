@@ -4,13 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoShoot;
 import frc.robot.commands.DriveForward;
@@ -57,11 +61,11 @@ public class RobotContainer {
 	private final NetworkTableEntry m_autoTurnFField = SmartDashboard.getEntry("AutoTurn/F Field");
 	private final NetworkTableEntry m_autoTurnSetpointField = SmartDashboard.getEntry("AutoTurn/Setpoint Field");
 
-	private final NetworkTableEntry m_driveForwardPField = SmartDashboard.getEntry("AutoTurn/P Field");
-	private final NetworkTableEntry m_driveForwardIField = SmartDashboard.getEntry("AutoTurn/I Field");
-	private final NetworkTableEntry m_driveForwardDField = SmartDashboard.getEntry("AutoTurn/D Field");
-	private final NetworkTableEntry m_driveForwardFField = SmartDashboard.getEntry("AutoTurn/F Field");
-	private final NetworkTableEntry m_driveForwardSetpointField = SmartDashboard.getEntry("AutoTurn/Setpoint Field");
+	private final NetworkTableEntry m_driveForwardPField = SmartDashboard.getEntry("DriveForward/P Field");
+	private final NetworkTableEntry m_driveForwardIField = SmartDashboard.getEntry("DriveForward/I Field");
+	private final NetworkTableEntry m_driveForwardDField = SmartDashboard.getEntry("DriveForward/D Field");
+	private final NetworkTableEntry m_driveForwardFField = SmartDashboard.getEntry("DriveForward/F Field");
+	private final NetworkTableEntry m_driveForwardSetpointField = SmartDashboard.getEntry("DriveForward/Setpoint Field");
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer() {
@@ -122,20 +126,30 @@ public class RobotContainer {
 	 */
 
 	private void configureButtonBindings() {
-		new JoystickButton(m_driver, XboxController.Button.kA.value)
-				.toggleWhenPressed(new OuttakeCommand(m_outtake, 1));
+		// new JoystickButton(m_driver, XboxController.Button.kA.value)
+		// 		.toggleWhenPressed(new OuttakeCommand(m_outtake, 1));
 		// new JoystickButton(m_driver, XboxController.Button.kB.value)
 		// 		.toggleWhenPressed(new IntakeCommand(m_intake));
 
 		// new JoystickButton(m_driver, XboxController.Button.kX.value)
 		// 	.whenPressed(new LowerArm(m_intake));
+
+		new JoystickButton(m_driver, XboxController.Button.kX.value)
+			.whenHeld(new OuttakeCommand(m_outtake, 1));
 			
-		new JoystickButton(m_driver, XboxController.Button.kY.value)
-			.toggleWhenPressed(new RunConveyor(m_connection));
+		new JoystickButton(m_driver, XboxController.Button.kA.value)
+			.whenHeld(new RunConveyor(m_connection));
 		
 		// bind AimAndShoot to the right bumper
-		// new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
-		// 	.whenPressed(new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera));
+		new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
+			.whenPressed(new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera));
+		
+		new JoystickButton(m_driver, XboxController.Button.kY.value)
+			.whenPressed(
+				new ParallelCommandGroup(
+					new OuttakeCommand(m_outtake, 1),
+					new WaitCommand(0.5).andThen(new RunConveyor(m_connection))
+				).withTimeout(2));
 	}
 
 	public void setLed(Pattern pattern) {

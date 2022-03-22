@@ -6,10 +6,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.TurnAngle;
-import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Outtake;
@@ -21,8 +19,8 @@ public class AutonomousManager {
     }
 
     // field data
-    private final double FIELD_WIDTH = 8.23;
-    private final double FIELD_LENGTH = 16.46;
+    private final double FIELD_WIDTH = 8.23 * 2;
+    private final double FIELD_LENGTH = 16.46 * 2;
     public final Translation2d CENTER_FIELD = new Translation2d(FIELD_WIDTH/2, FIELD_LENGTH/2);
 
     public final Path DEFAULT_PATH = Path.NONE;

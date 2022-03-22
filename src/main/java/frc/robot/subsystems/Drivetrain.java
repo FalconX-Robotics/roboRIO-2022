@@ -6,8 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -31,7 +32,8 @@ public class Drivetrain extends SubsystemBase {
 	private final NetworkTableEntry m_drivetrainGyroEntry = SmartDashboard.getEntry("Drivetrain/Gyro");
 	private final NetworkTableEntry m_turnAngleGyroEntry = SmartDashboard.getEntry("TurnAngle/Gyro");
 	private final NetworkTableEntry m_cameraGyroEntry = SmartDashboard.getEntry("Camera/Gyro");
-	
+	private final NetworkTableEntry m_encoderEntry = SmartDashboard.getEntry("Drivetrain/Encoder");
+
 	// Define motor
 
 	// define left MotorControl group
@@ -57,8 +59,8 @@ public class Drivetrain extends SubsystemBase {
 	private final DriveMod m_driveMod = new DriveMod(m_modChooser);
 
 	// Encoder stuff
-	private final double WHEEL_CIRCUMFERENCE = 1. * Math.PI; // random value
-	private final double kEncoderConversionRatio = 1.; // random value
+	private final double WHEEL_CIRCUMFERENCE = 6. * Math.PI; 
+	private final double kEncoderConversionRatio = (WHEEL_CIRCUMFERENCE * (12. / 50.) * (24. / 50.)) / 39.37; // in meters
 	
 	private final RelativeEncoder m_leftEncoder = m_leftFrontMotor.getEncoder();
 	private final RelativeEncoder m_rightEncoder = m_rightFrontMotor.getEncoder();
@@ -68,9 +70,16 @@ public class Drivetrain extends SubsystemBase {
 		m_drivetrain.setSafetyEnabled(true);
 
 		m_rightSide.setInverted(true);
-
+		m_rightBackMotor.setIdleMode(IdleMode.kBrake);
+		m_rightFrontMotor.setIdleMode(IdleMode.kBrake);
+		m_leftBackMotor.setIdleMode(IdleMode.kBrake);
+		m_leftFrontMotor.setIdleMode(IdleMode.kBrake);
 		m_leftEncoder.setPositionConversionFactor(kEncoderConversionRatio);
 		m_rightEncoder.setPositionConversionFactor(kEncoderConversionRatio);
+		m_leftFrontMotor.setOpenLoopRampRate(0.3);
+        m_rightFrontMotor.setOpenLoopRampRate(0.3);
+        m_leftBackMotor.setOpenLoopRampRate(0.3);
+        m_rightBackMotor.setOpenLoopRampRate(0.3);
 
 		SmartDashboard.putData("Drivetrain/Mod", m_modChooser);
 	}
@@ -143,7 +152,7 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public double averageEncoderDistance() {
-		return (leftEncoderDistance() + rightEncoderDistance() / 2); // implement
+		return (leftEncoderDistance() + rightEncoderDistance()) / 2; // implement
 	}
 	
 	public void resetEncoder() {
@@ -156,6 +165,8 @@ public class Drivetrain extends SubsystemBase {
 		m_drivetrainGyroEntry.setDouble(gyroYaw());
 		m_cameraGyroEntry.setDouble(gyroYaw());
 		m_turnAngleGyroEntry.setDouble(gyroYaw());
+
+		m_encoderEntry.setDouble(averageEncoderDistance());
 
 		m_leftSideOutputEntry.setDouble(m_leftSide.get());
 		m_rightSideOutputEntry.setDouble(m_rightSide.get());

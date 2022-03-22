@@ -18,7 +18,7 @@ public class Connection extends SubsystemBase {
 
   // run motor method
   public void runConnection(){
-    m_connectionMotor.set(0.5);
+    m_connectionMotor.set(1.0);
   }
   
   // stop motor method
