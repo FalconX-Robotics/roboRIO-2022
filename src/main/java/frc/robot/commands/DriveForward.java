@@ -15,7 +15,6 @@ public class DriveForward extends PIDCommand {
     protected double m_positionTolerance = 0, m_velocityTolerance = 0;
     protected double m_maxSpeed = 1;
 
-    protected DoubleSupplier m_setpointSupplier;
 	protected NetworkTableEntry m_errorField = SmartDashboard.getEntry("DriveForward/Error");
     protected NetworkTableEntry m_velocityField = SmartDashboard.getEntry("DriveForward/Velocity");
     
@@ -51,7 +50,6 @@ public class DriveForward extends PIDCommand {
 
     @Override
     public void initialize() {
-        double setpoint = m_setpointSupplier.getAsDouble();
         m_useOutput = output -> m_drivetrain.arcadeDrive(m_F*Math.signum(output) + MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed), 0);
 
         double m_initEncoderDistance = m_drivetrain.averageEncoderDistance();
