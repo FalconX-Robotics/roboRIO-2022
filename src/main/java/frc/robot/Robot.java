@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Led.Pattern;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -62,7 +61,6 @@ public class Robot extends TimedRobot {
 	/** This function is called once each time the robot enters Disabled mode. */
 	@Override
 	public void disabledInit() {
-		m_robotContainer.setLed(Pattern.kLarsonScanner);
 	}
 
 	@Override
@@ -81,8 +79,6 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
-
-		m_robotContainer.setLed(Pattern.kRed);
 	}
 
 	/** This function is called periodically during autonomous. */
@@ -99,7 +95,6 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-		m_robotContainer.setLed(Pattern.kWhite);
 	}
 
 	/** This function is called periodically during operator control. */

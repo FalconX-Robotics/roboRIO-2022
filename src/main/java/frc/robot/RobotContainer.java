@@ -23,7 +23,6 @@ import frc.robot.commands.TurnAngle;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Led.Pattern;
 import frc.robot.subsystems.Outtake;
 
 /**
@@ -145,11 +144,7 @@ public class RobotContainer {
 					new WaitCommand(0.5).andThen(new RunConveyor(m_connection))
 				).withTimeout(2));
 	}
-
-	public void setLed(Pattern pattern) {
-		// m_led.setLed(pattern);
-	}
-
+	
 	/**
 	 * Use this to pass the autonomous command to the main {@link Robot} class.
 	 *
