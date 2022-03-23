@@ -93,7 +93,7 @@ public class RobotContainer {
 		m_driveForwardPField.setDouble(0);
 		m_driveForwardIField.setDouble(0);
 		m_driveForwardDField.setDouble(0);
-		m_driveForwardPField.setDouble(0);
+		m_driveForwardFField.setDouble(0);
 		m_driveForwardSetpointField.setDouble(5);
 		SmartDashboard.putData("DriveForward/DriveForward", new DriveForward(5, m_drivetrain) {
 			@Override

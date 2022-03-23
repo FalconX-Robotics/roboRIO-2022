@@ -56,6 +56,7 @@ public class TurnAngle extends PIDCommand {
             double r = -m_F*Math.signum(output) - MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed);
             m_drivetrain.arcadeDrive(0, r);
         };
+        m_drivetrain.resetGyroYaw();
     }
 
     @Override

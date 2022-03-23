@@ -14,6 +14,8 @@ public class RunConveyor extends CommandBase {
   public RunConveyor(Connection connection) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_connection = connection;
+
+    addRequirements(m_connection);
   }
 
   // Called when the command is initially scheduled.

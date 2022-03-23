@@ -27,6 +27,8 @@ public class AutoShoot extends WaitCommand {
         super(k_shootTime);
         m_outtake = outtake;
         m_camera = camera;
+
+        addRequirements(m_outtake);
     }
 
     private class MotorSpeed {

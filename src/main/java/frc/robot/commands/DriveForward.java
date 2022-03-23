@@ -50,10 +50,12 @@ public class DriveForward extends PIDCommand {
 
     @Override
     public void initialize() {
-        m_useOutput = output -> m_drivetrain.arcadeDrive(m_F*Math.signum(output) + MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed), 0);
+        m_useOutput = output -> m_drivetrain.arcadeDrive(-m_F*Math.signum(output) - MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed), 0);
 
         double m_initEncoderDistance = m_drivetrain.averageEncoderDistance();
         m_measurement = () -> m_drivetrain.averageEncoderDistance() - m_initEncoderDistance;
+
+        m_drivetrain.resetEncoder();
     }
 
     @Override
