@@ -28,6 +28,8 @@ public class DriveForward extends PIDCommand {
         m_drivetrain = drivetrain;
         m_controller.setPID(m_P, m_I, m_D);
         m_controller.setTolerance(m_positionTolerance, m_velocityTolerance);
+
+        addRequirements(m_drivetrain);
     }
 
     public DriveForward(double setpointSource, Drivetrain drivetrain) {

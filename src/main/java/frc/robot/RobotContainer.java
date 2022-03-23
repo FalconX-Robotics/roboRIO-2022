@@ -10,12 +10,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.DriveForward;
+import frc.robot.commands.ManualShoot;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RunConveyor;
 import frc.robot.commands.TankDrive;
@@ -138,11 +137,7 @@ public class RobotContainer {
 			.whenPressed(new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera));
 		
 		new JoystickButton(m_driver, XboxController.Button.kY.value)
-			.whenPressed(
-				new ParallelCommandGroup(
-					new OuttakeCommand(m_outtake, 1),
-					new WaitCommand(0.5).andThen(new RunConveyor(m_connection))
-				).withTimeout(2));
+			.whenPressed(new ManualShoot(m_outtake, m_connection));
 	}
 	
 	/**

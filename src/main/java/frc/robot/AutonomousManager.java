@@ -8,16 +8,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.DriveForward;
-import frc.robot.commands.OuttakeCommand;
-import frc.robot.commands.RunConveyor;
+import frc.robot.commands.ManualShoot;
 import frc.robot.commands.TurnAngle;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Outtake;
-
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class AutonomousManager {
     
@@ -57,10 +53,7 @@ public class AutonomousManager {
         if (useVision) {
             m_shoot = new AimAndShoot(drivetrain, connection, outtake, camera);
         } else {
-            m_shoot = new ParallelCommandGroup(
-                new OuttakeCommand(m_outtake, 1),
-                new WaitCommand(0.5).andThen(new RunConveyor(m_connection))
-            ).withTimeout(2);
+            m_shoot = new ManualShoot(m_outtake, m_connection);
         }
     }
 

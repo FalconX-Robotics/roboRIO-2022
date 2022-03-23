@@ -8,7 +8,7 @@ import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Drivetrain;
 
 public class TurnToTarget extends TurnAngle {
-    private Drivetrain m_drivetrain;
+    private @SuppressWarnings("unused") Drivetrain m_drivetrain;
     private Camera m_camera;
 
     //Access Smart Dashboard(?)
@@ -20,7 +20,7 @@ public class TurnToTarget extends TurnAngle {
         m_drivetrain = drivetrain;
         m_camera = camera;
         
-        addRequirements(m_drivetrain, camera);
+        addRequirements(camera);
     }
 
     @Override

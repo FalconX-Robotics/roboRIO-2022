@@ -52,8 +52,8 @@ public class Drivetrain extends SubsystemBase {
 	private final DriveMod m_driveMod = new DriveMod(m_modChooser);
 
 	// Encoder stuff
-	private final double WHEEL_CIRCUMFERENCE = 6. * Math.PI; 
-	private final double kEncoderConversionRatio = (WHEEL_CIRCUMFERENCE * (12. / 50.) * (24. / 50.)) / 39.37; // in meters
+	private final double WHEEL_CIRCUMFERENCE = 6. * Math.PI * 2.2 / 100; 
+	private final double kEncoderConversionRatio = (WHEEL_CIRCUMFERENCE * (12. / 50.) * (24. / 50.)); // in meters
 	
 	private final RelativeEncoder m_leftEncoder = m_leftFrontMotor.getEncoder();
 	private final RelativeEncoder m_rightEncoder = m_rightFrontMotor.getEncoder();
@@ -81,13 +81,7 @@ public class Drivetrain extends SubsystemBase {
 	public void tankDrive(double leftSpeed, double rightSpeed) {
 		m_drivetrain.tankDrive(leftSpeed, rightSpeed);
 	}
-
-	public void tankDriveVolts(double leftVolt, double rightVolt) {
-		m_leftSide.setVoltage(leftVolt);
-		m_rightSide.setVoltage(rightVolt);
-		m_drivetrain.feed();
-	}
-
+	
 	// Creates arcadeDrive
 	public void arcadeDrive(double xSpeed, double zRotation, boolean modded) {
 		xSpeed = inputToSpeed(xSpeed);

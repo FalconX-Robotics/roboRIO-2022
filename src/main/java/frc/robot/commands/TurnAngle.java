@@ -29,6 +29,8 @@ public class TurnAngle extends PIDCommand {
         m_controller.setPID(m_P, m_I, m_D);
         m_controller.enableContinuousInput(-180, 180);
         m_controller.setTolerance(m_positionTolerance, m_velocityTolerance);
+
+        addRequirements(m_drivetrain);
     }
 
     public TurnAngle(double setpointSource, Drivetrain drivetrain) {
@@ -51,8 +53,8 @@ public class TurnAngle extends PIDCommand {
     @Override
     public void initialize() {
         m_useOutput = output -> {
-            double volts = -m_F*Math.signum(output) - MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed);
-            m_drivetrain.tankDriveVolts(volts, -volts);
+            double r = -m_F*Math.signum(output) - MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed);
+            m_drivetrain.arcadeDrive(0, r);
         };
     }
 
