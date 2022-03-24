@@ -9,9 +9,9 @@ import frc.robot.subsystems.Drivetrain;
 
 public class DriveForward extends PIDCommand {
     private Drivetrain m_drivetrain;
-    protected double m_P = 0, m_I = 0, m_D = 0, m_F = 0;
-    protected double m_positionTolerance = 0, m_velocityTolerance = 0;
-    protected double m_maxSpeed = 1;
+    protected double m_P = 0.8, m_I = 0, m_D = 0, m_F = 0.132;
+    protected double m_positionTolerance = 0.01, m_velocityTolerance = 40;
+    protected double m_maxSpeed = 0.7;
 
 	// protected NetworkTableEntry m_errorField = SmartDashboard.getEntry("DriveForward/Error");
     // protected NetworkTableEntry m_velocityField = SmartDashboard.getEntry("DriveForward/Velocity");
@@ -52,8 +52,7 @@ public class DriveForward extends PIDCommand {
     public void initialize() {
         m_useOutput = output -> m_drivetrain.arcadeDrive(-m_F*Math.signum(output) - MathUtil.clamp(output, -m_maxSpeed, m_maxSpeed), 0);
 
-        double m_initEncoderDistance = m_drivetrain.averageEncoderDistance();
-        m_measurement = () -> m_drivetrain.averageEncoderDistance() - m_initEncoderDistance;
+        m_measurement = () -> m_drivetrain.averageEncoderDistance();
 
         m_drivetrain.resetEncoder();
     }
@@ -68,10 +67,5 @@ public class DriveForward extends PIDCommand {
     @Override
     public boolean isFinished() {
         return getController().atSetpoint();
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        // m_errorField.setDouble(100);
     }
 }

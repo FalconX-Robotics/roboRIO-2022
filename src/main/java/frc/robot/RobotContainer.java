@@ -47,8 +47,6 @@ public class RobotContainer {
 	private final SendableChooser<AutonomousManager.Path> m_pathChooser = new SendableChooser<AutonomousManager.Path>();
 
 	private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driver);
-	@SuppressWarnings("unused")
-	private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, m_driver);
 
 	private final NetworkTableEntry m_autoTurnPField = SmartDashboard.getEntry("AutoTurn/P Field");
 	private final NetworkTableEntry m_autoTurnIField = SmartDashboard.getEntry("AutoTurn/I Field");

@@ -9,9 +9,9 @@ import frc.robot.subsystems.Drivetrain;
 
 public class TurnAngle extends PIDCommand {
     private Drivetrain m_drivetrain;
-    protected double m_P = 0, m_I = 0, m_D = 0, m_F = 0;
-    protected double m_positionTolerance = 0, m_velocityTolerance = 0;
-    protected double m_maxSpeed = 1;
+    protected double m_P = 0.01, m_I = 0, m_D = 0, m_F = 0.192;
+    protected double m_positionTolerance = 4, m_velocityTolerance = 40;
+    protected double m_maxSpeed = 0.7;
     
 	// protected NetworkTableEntry m_errorField = SmartDashboard.getEntry("TurnAngle/Error");
     // protected NetworkTableEntry m_velocityField = SmartDashboard.getEntry("TurnAngle/Velocity");
@@ -21,7 +21,7 @@ public class TurnAngle extends PIDCommand {
      */
     public TurnAngle(DoubleSupplier setpointSource, Drivetrain drivetrain) {
         super(new PIDController(0, 0, 0),
-            () -> 0.,
+            () -> drivetrain.gyroYaw(),
             setpointSource,
             output -> {},
             drivetrain);
@@ -69,10 +69,5 @@ public class TurnAngle extends PIDCommand {
     @Override
     public boolean isFinished() {
         return getController().atSetpoint();
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        // m_errorField.setDouble(360);
     }
 }
