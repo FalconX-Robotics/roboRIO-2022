@@ -8,7 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Camera extends SubsystemBase {
+public class Camera extends SubsystemBase implements AutoCloseable {
     public final double kYawNotViewable = 3600;
     public final double kPitchNotViewable = -3600;
     public final double kDistanceNotViewable = -1000;
@@ -54,5 +54,9 @@ public class Camera extends SubsystemBase {
     public void periodic() {
         m_yawEntry.setDouble(targetYaw().orElse(kYawNotViewable));
         m_distanceEntry.setDouble(targetDistance().orElse(kDistanceNotViewable));
+    }
+
+    @Override
+    public void close() {
     }
 }

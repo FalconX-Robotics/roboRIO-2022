@@ -1,4 +1,43 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [2]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [4]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [6]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [7]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [8]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [9]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
@@ -11,13 +50,20 @@
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
+      "/LiveWindow/Ungrouped/Pigeon IMU [42]": "Gyro",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Auto/Field": "Field2d",
+      "/SmartDashboard/AutoTurn/TurnAngle": "Command",
+      "/SmartDashboard/DriveForward/DriveForward": "Command",
       "/SmartDashboard/Drivetrain/AutoShoot": "Command",
       "/SmartDashboard/Drivetrain/Led Chooser": "String Chooser",
+      "/SmartDashboard/Drivetrain/Mod": "String Chooser",
       "/SmartDashboard/Drivetrain/Mod Chooser": "String Chooser",
       "/SmartDashboard/Drivetrain/TurnAngle": "Command",
-      "/SmartDashboard/Drivetrain/TurnToTarget": "Command"
+      "/SmartDashboard/Drivetrain/TurnToTarget": "Command",
+      "/SmartDashboard/Main/Path": "String Chooser"
     }
   }
 }

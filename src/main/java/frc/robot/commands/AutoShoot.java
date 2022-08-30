@@ -49,8 +49,8 @@ public class AutoShoot extends WaitCommand {
         if (distance <= k_minDistance || distance > m_motorSpeeds[m_motorSpeeds.length-1].distance) return Optional.empty();
         for (int i = 0; i < m_motorSpeeds.length-1; i++) {
             MotorSpeed lowerSpeed = m_motorSpeeds[i];
-            if (lowerSpeed.distance <= distance) {
-                MotorSpeed upperSpeed = m_motorSpeeds[i+1];
+            MotorSpeed upperSpeed = m_motorSpeeds[i+1];
+            if (lowerSpeed.distance <= distance && distance <= upperSpeed.distance) {
                 double bottom = approxSpeed(distance, lowerSpeed.distance, lowerSpeed.bottom, upperSpeed.distance, upperSpeed.bottom);
                 double top = approxSpeed(distance, lowerSpeed.distance, lowerSpeed.top, upperSpeed.distance, upperSpeed.top);
 
@@ -80,6 +80,7 @@ public class AutoShoot extends WaitCommand {
     @Override
     public void execute() {
         super.execute();
+        System.out.println("Voltage: " + m_motorSpeed.bottom + " " + m_motorSpeed.top);
         m_outtake.runMotors(m_motorSpeed.bottom, m_motorSpeed.top);
     }
 
