@@ -157,8 +157,8 @@ public class RobotContainer {
 			.whenHeld(new RunConveyor(m_connection));
 		
 		// bind AimAndShoot to the right bumper
-		new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
-			.whenPressed(new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera));
+		// new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
+		// 	.whenPressed(new AimAndShoot(m_drivetrain, m_connection, m_outtake, m_camera));
 		
 		new JoystickButton(m_driver, XboxController.Button.kY.value)
 			.whenPressed(
