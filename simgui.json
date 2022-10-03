@@ -11,13 +11,19 @@
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/Pigeon IMU [42]": "Gyro",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Auto/Field": "Field2d",
+      "/SmartDashboard/AutoTurn/TurnAngle": "Command",
+      "/SmartDashboard/DriveForward/DriveForward": "Command",
       "/SmartDashboard/Drivetrain/AutoShoot": "Command",
       "/SmartDashboard/Drivetrain/Led Chooser": "String Chooser",
+      "/SmartDashboard/Drivetrain/Mod": "String Chooser",
       "/SmartDashboard/Drivetrain/Mod Chooser": "String Chooser",
       "/SmartDashboard/Drivetrain/TurnAngle": "Command",
-      "/SmartDashboard/Drivetrain/TurnToTarget": "Command"
+      "/SmartDashboard/Drivetrain/TurnToTarget": "Command",
+      "/SmartDashboard/Main/Path": "String Chooser"
     }
   }
 }
