@@ -33,6 +33,6 @@ public class Intake extends SubsystemBase {
     }
 
     public double armAngle() {
-
+        return 0.;
     }
 }
