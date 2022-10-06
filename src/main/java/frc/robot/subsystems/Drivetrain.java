@@ -154,5 +154,6 @@ public class Drivetrain extends SubsystemBase {
 
 		m_leftSideOutputEntry.setDouble(m_leftSide.get());
 		m_rightSideOutputEntry.setDouble(m_rightSide.get());
+
 	}
 }

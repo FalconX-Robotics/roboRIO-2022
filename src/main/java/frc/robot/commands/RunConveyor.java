@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Connection;
 
@@ -27,6 +28,7 @@ public class RunConveyor extends CommandBase {
   public void execute() {
     // call method to run motor
     m_connection.runConnection();
+    
   }
 
   // Called once the command ends or is interrupted.
