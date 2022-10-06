@@ -21,6 +21,7 @@ public class Camera extends SubsystemBase {
     private NetworkTableEntry m_XEntry = m_limelightTable.getEntry("tx");
     private NetworkTableEntry m_YEntry = m_limelightTable.getEntry("ty");
     private NetworkTableEntry m_AEntry = m_limelightTable.getEntry("ta");
+    private double VOffset = m_YEntry.getNumber(kCameraAngle*-1).doubleValue();
 
     private NetworkTableEntry m_yawEntry = SmartDashboard.getEntry("Camera/Pitch"); 
     private NetworkTableEntry m_distanceEntry = SmartDashboard.getEntry("Camera/Distance");
@@ -71,6 +72,8 @@ public class Camera extends SubsystemBase {
         m_yawEntry.setDouble(targetYaw().orElse(kYawNotViewable));
         m_distanceEntry.setDouble(targetDistance().orElse(kDistanceNotViewable));
 
-        SmartDashboard.putNumber("distance", getTargetDistance(25));
+
+        SmartDashboard.putNumber("distance", getTargetDistance(VOffset));
+        
     }
 }
