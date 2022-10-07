@@ -22,6 +22,7 @@ import frc.robot.commands.TurnAngle;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Connection;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Outtake;
 
 /**
@@ -41,7 +42,7 @@ public class RobotContainer {
 	private final Drivetrain m_drivetrain = new Drivetrain();
 	private final Outtake m_outtake = new Outtake();
 	private final Connection m_connection = new Connection();
-	// private final Intake m_intake = new Intake();
+	private final Intake m_intake = new Intake();
 
 	private final AutonomousManager m_autonomousManager = new AutonomousManager(m_drivetrain, m_connection, m_outtake, m_camera, m_driver);
 	private final SendableChooser<AutonomousManager.Path> m_pathChooser = new SendableChooser<AutonomousManager.Path>();
