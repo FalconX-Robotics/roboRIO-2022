@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
     public Intake() {}
 
     public void runIntake() {
-        runIntake(0.0);
+        runIntake(1);
     }
 
     public void runIntake(double speed) {

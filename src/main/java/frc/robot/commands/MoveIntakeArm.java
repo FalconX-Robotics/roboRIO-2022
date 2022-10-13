@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
@@ -13,6 +14,8 @@ public class MoveIntakeArm extends CommandBase {
   private Intake m_intake;
   private double m_angle;
   private PIDController m_controller = new PIDController(1, 0, 0);
+  private final double kG = 1.0;
+  //private ArmFeedforward m_feedForward = new ArmFeedforward(0, 1, 0);
 
   public MoveIntakeArm(double angle, Intake intake) {
     m_intake = intake;
@@ -31,6 +34,7 @@ public class MoveIntakeArm extends CommandBase {
   @Override
   public void execute() {
     double speed = m_controller.calculate(m_intake.getArmAngle());
+    speed += Math.cos(Math.toRadians(m_intake.getArmAngle())) * kG;
     m_intake.lowerArm(speed);
   }
 

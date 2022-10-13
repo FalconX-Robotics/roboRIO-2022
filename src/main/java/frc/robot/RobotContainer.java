@@ -15,6 +15,8 @@ import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.ManualShoot;
+import frc.robot.commands.MoveArmDownAndRun;
+import frc.robot.commands.MoveArmUpAndStop;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RunConveyor;
 import frc.robot.commands.TankDrive;
@@ -133,6 +135,12 @@ public class RobotContainer {
 		
 		new JoystickButton(m_driver, XboxController.Button.kY.value)
 			.whenPressed(new ManualShoot(m_outtake, m_connection));
+		
+		new JoystickButton(m_driver, XboxController.Button.kLeftBumper.value)
+			.whenPressed(new MoveArmDownAndRun(m_intake, 1));
+
+		new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
+			.whenPressed(new MoveArmUpAndStop(m_intake));
 	}
 	
 	/**
