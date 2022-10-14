@@ -20,11 +20,7 @@ public class Camera extends SubsystemBase {
     private NetworkTable m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     private NetworkTableEntry m_XEntry = m_limelightTable.getEntry("tx");
     private NetworkTableEntry m_YEntry = m_limelightTable.getEntry("ty");
-<<<<<<< HEAD
     private NetworkTableEntry m_AEntry = m_limelightTable.getEntry("ta"); 
-=======
-    private NetworkTableEntry m_AEntry = m_limelightTable.getEntry("ta");
->>>>>>> e2ebfe4 (Camera Distance and Shot Plausibility without the)
 
     // private NetworkTableEntry m_yawEntry = SmartDashboard.getEntry("Camera/Pitch"); 
     // private NetworkTableEntry m_distanceEntry = SmartDashboard.getEntry("Camera/Distance");
