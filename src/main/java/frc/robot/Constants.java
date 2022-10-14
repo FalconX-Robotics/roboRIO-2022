@@ -23,12 +23,12 @@ public final class Constants {
     public final static int PIGEON_PORT = 42;
 
     // left ports
-    public final static int LEFT_FRONT_MOTOR_PORT = 4;
-    public final static int LEFT_BACK_MOTOR_PORT = 1;
+    public final static int LEFT_FRONT_MOTOR_PORT = 2;
+    public final static int LEFT_BACK_MOTOR_PORT = 7;
 
     // right ports
-    public final static int RIGHT_FRONT_MOTOR_PORT = 7;
-    public final static int RIGHT_BACK_MOTOR_PORT = 2;
+    public final static int RIGHT_FRONT_MOTOR_PORT = 1;
+    public final static int RIGHT_BACK_MOTOR_PORT = 4;
 
     // controller port
     public final static int CONTROLLER_PORT = 0;
