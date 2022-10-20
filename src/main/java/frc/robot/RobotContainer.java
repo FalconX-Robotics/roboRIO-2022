@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AimAndShoot;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.ManualShoot;
 import frc.robot.commands.MoveArmDownAndRun;
@@ -141,6 +142,9 @@ public class RobotContainer {
 
 		new JoystickButton(m_driver, XboxController.Button.kRightBumper.value)
 			.whenPressed(new MoveArmUpAndStop(m_intake));
+
+		new JoystickButton(m_driver, XboxController.Button.kB.value)
+			.whenPressed(new AutoAim(m_drivetrain));
 	}
 	
 	/**
